@@ -1,0 +1,142 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id           Int      @id @default(autoincrement())
+  nombre       String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  isAdmin      Boolean  @default(false) @map("is_admin")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  equipos Equipo[]
+}
+
+model Temporada {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  activa      Boolean  @default(false)
+  fechaInicio DateTime @map("fecha_inicio")
+  fechaFin    DateTime @map("fecha_fin")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  fechas  Fecha[]
+  equipos Equipo[]
+}
+
+model Jugador {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  apellido  String
+  apodo     String?
+  camada    Int?
+  posicion  Posicion
+  activo    Boolean  @default(true)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  jugadorFechas        JugadorFecha[]
+  equipoFechaJugadores EquipoFechaJugador[]
+}
+
+model Fecha {
+  id              Int         @id @default(autoincrement())
+  temporadaId     Int         @map("temporada_id")
+  nro             Int
+  rival           String
+  estado          EstadoFecha @default(PREVIA)
+  cierraEdicionAt DateTime?   @map("cierra_edicion_at")
+  createdAt       DateTime    @default(now()) @map("created_at")
+
+  temporada     Temporada      @relation(fields: [temporadaId], references: [id])
+  jugadorFechas JugadorFecha[]
+  equipoFechas  EquipoFecha[]
+
+  @@unique([temporadaId, nro])
+}
+
+model JugadorFecha {
+  id               Int      @id @default(autoincrement())
+  jugadorId        Int      @map("jugador_id")
+  fechaId          Int      @map("fecha_id")
+  plantel          Plantel
+  tries            Int      @default(0)
+  tackles          Int      @default(0)
+  knockOns         Int      @default(0) @map("knock_ons")
+  penales          Int      @default(0)
+  amarillas        Int      @default(0)
+  rojas            Int      @default(0)
+  puntajeCalculado Int      @default(0) @map("puntaje_calculado")
+  puntajeOverride  Int?     @map("puntaje_override")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  jugador Jugador @relation(fields: [jugadorId], references: [id])
+  fecha   Fecha   @relation(fields: [fechaId], references: [id])
+
+  @@unique([fechaId, jugadorId])
+}
+
+model Equipo {
+  id          Int      @id @default(autoincrement())
+  usuarioId   Int      @map("usuario_id")
+  temporadaId Int      @map("temporada_id")
+  nombre      String
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  usuario      Usuario       @relation(fields: [usuarioId], references: [id])
+  temporada    Temporada     @relation(fields: [temporadaId], references: [id])
+  equipoFechas EquipoFecha[]
+
+  @@unique([temporadaId, usuarioId])
+}
+
+model EquipoFecha {
+  id               Int      @id @default(autoincrement())
+  equipoId         Int      @map("equipo_id")
+  fechaId          Int      @map("fecha_id")
+  puntajeTotal     Int      @default(0) @map("puntaje_total")
+  capitanJugadorId Int?     @map("capitan_jugador_id")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  equipo    Equipo               @relation(fields: [equipoId], references: [id])
+  fecha     Fecha                @relation(fields: [fechaId], references: [id])
+  jugadores EquipoFechaJugador[]
+
+  @@unique([equipoId, fechaId])
+}
+
+model EquipoFechaJugador {
+  id            Int @id @default(autoincrement())
+  equipoFechaId Int @map("equipo_fecha_id")
+  jugadorId     Int @map("jugador_id")
+
+  equipoFecha EquipoFecha @relation(fields: [equipoFechaId], references: [id])
+  jugador     Jugador     @relation(fields: [jugadorId], references: [id])
+
+  @@unique([equipoFechaId, jugadorId])
+}
+
+enum Posicion {
+  FORWARD
+  BACK
+}
+
+enum Plantel {
+  PRIMERA
+  INTER
+  PRE_A
+  PRE_B
+  PRE_C
+  PRE_D
+}
+
+enum EstadoFecha {
+  PREVIA
+  CERRADA
+  PUNTUADA
+}

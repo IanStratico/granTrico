@@ -1,0 +1,12 @@
+.DS_Store
+node_modules
+.next
+out
+.env
+.env.local
+/.vercel
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+coverage
+logs
