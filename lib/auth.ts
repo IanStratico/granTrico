@@ -12,14 +12,19 @@ export const authConfig: NextAuthConfig = {
         password: { label: 'Contraseña', type: 'password' }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) return null;
+        if (!credentials) return null;
+
+        const email = typeof credentials.email === 'string' ? credentials.email : '';
+        const password = typeof credentials.password === 'string' ? credentials.password : '';
+
+        if (!email || !password) return null;
 
         const user = await prisma.usuario.findUnique({
-          where: { email: credentials.email }
+          where: { email }
         });
         if (!user) return null;
 
-        const isValid = await bcrypt.compare(credentials.password, user.passwordHash);
+        const isValid = await bcrypt.compare(password, user.passwordHash);
         if (!isValid) return null;
 
         return {
