@@ -9,20 +9,11 @@ export const POST = async (req: Request) => {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
   }
 
-  const form = await req.formData().catch(() => null);
-  let nro: number | null = null;
-  let rival: string | null = null;
+  const body = await req.json().catch(() => null);
+  const nro = body?.nro !== undefined ? Number(body.nro) : NaN;
+  const rival = body?.rival as string | undefined;
 
-  if (form) {
-    nro = Number(form.get('nro'));
-    rival = form.get('rival') as string | null;
-  } else {
-    const body = await req.json().catch(() => null);
-    nro = body?.nro ? Number(body.nro) : null;
-    rival = body?.rival ?? null;
-  }
-
-  if (!nro || !rival) {
+  if (isNaN(nro) || !rival) {
     return NextResponse.json({ error: 'Datos inválidos' }, { status: 400 });
   }
 
