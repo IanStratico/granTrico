@@ -11,19 +11,12 @@ export default async function AdminRootPage() {
   }
 
   const temporadaActiva = await prisma.temporada.findFirst({ where: { activa: true } });
-  if (!temporadaActiva) {
-    return (
-      <main className="p-4 space-y-3">
-        <h1 className="text-2xl font-semibold">Admin</h1>
-        <p className="text-sm text-gray-600">No hay temporada activa.</p>
-      </main>
-    );
-  }
-
-  const fechas = await prisma.fecha.findMany({
-    where: { temporadaId: temporadaActiva.id },
-    orderBy: { nro: 'asc' }
-  });
+  const fechas = temporadaActiva
+    ? await prisma.fecha.findMany({
+        where: { temporadaId: temporadaActiva.id },
+        orderBy: { nro: 'asc' }
+      })
+    : [];
 
   const target =
     fechas.find((f) => f.estado === EstadoFecha.PREVIA) || (fechas.length ? fechas[fechas.length - 1] : null);
@@ -31,6 +24,15 @@ export default async function AdminRootPage() {
   return (
     <main className="p-4 space-y-4">
       <h1 className="text-2xl font-semibold">Admin</h1>
+      {!temporadaActiva && (
+        <p className="text-sm text-gray-700">
+          No hay temporada activa. Creá una para comenzar desde{' '}
+          <Link href="/admin/temporadas" className="text-blue-600 underline">
+            Gestión de temporadas
+          </Link>
+          .
+        </p>
+      )}
       <div className="space-y-3">
         <Link
           href={target ? `/admin/fecha/${target.id}` : '#'}

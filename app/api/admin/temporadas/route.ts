@@ -7,8 +7,8 @@ export const POST = async (req: Request) => {
   if (!session?.user?.isAdmin)
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
 
-  const form = await req.formData().catch(() => null);
-  const nombre = form ? (form.get("nombre") as string | null) : null;
+  const body = await req.json().catch(() => null);
+  const nombre = body?.nombre as string | undefined;
   if (!nombre)
     return NextResponse.json({ error: "Nombre requerido" }, { status: 400 });
 

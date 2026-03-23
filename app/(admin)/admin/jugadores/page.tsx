@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import ImportJugadoresForm from '@/components/ImportJugadoresForm';
 
 export default async function AdminJugadoresPage() {
   const session = await auth();
@@ -13,11 +14,7 @@ export default async function AdminJugadoresPage() {
       <h1 className="text-2xl font-semibold">Jugadores</h1>
       <section className="space-y-2">
         <h2 className="text-lg font-semibold">Importar</h2>
-        <form action="/api/admin/jugadores/import" method="post" encType="multipart/form-data" className="space-y-2">
-          <input type="file" name="file" accept=".csv" required className="text-base" />
-          <button className="rounded bg-blue-600 text-white px-4 py-2 text-base">Importar jugadores</button>
-        </form>
-        <p className="text-xs text-gray-500">Formato: nombre,apellido,apodo,camada,posicion</p>
+        <ImportJugadoresForm />
       </section>
 
       <section className="space-y-2">
