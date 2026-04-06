@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useMemo, useState } from 'react';
-import FieldView from '@/components/FieldView';
-import FechaSwitcher from '@/components/FechaSwitcher';
-import RankingLayout from '@/components/RankingLayout';
+import { useMemo, useState } from "react";
+import FieldView from "@/components/FieldView";
+import FechaSwitcher from "@/components/FechaSwitcher";
+import RankingLayout from "@/components/RankingLayout";
 
 const formationOrder = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10, 12, 13, 11, 15, 14];
 
@@ -16,7 +16,7 @@ export interface RankingTeamVM {
   jugadores: {
     jugadorId: number;
     nombre: string;
-    posicion: 'FORWARD' | 'BACK';
+    posicion: "FORWARD" | "BACK";
     score: number | null;
   }[];
 }
@@ -27,25 +27,35 @@ interface Props {
   prevId: number | null;
   nextId: number | null;
   userEmail: string;
-  userRole: 'admin' | 'user';
+  userRole: "admin" | "user";
   isAdmin: boolean;
   estado: string;
 }
 
-export default function RankingFechaClient({ title, teams, prevId, nextId, userEmail, userRole, isAdmin, estado }: Props) {
-  const [query, setQuery] = useState('');
+export default function RankingFechaClient({
+  title,
+  teams,
+  prevId,
+  nextId,
+  userEmail,
+  userRole,
+  isAdmin,
+  estado,
+}: Props) {
+  const [query, setQuery] = useState("");
   const [modalTeam, setModalTeam] = useState<RankingTeamVM | null>(null);
 
-  const lastPlaceId = estado === 'PUNTUADA' && teams.length > 0
-    ? teams[teams.length - 1].equipoFechaId
-    : null;
+  const lastPlaceId =
+    estado === "PUNTUADA" && teams.length > 0
+      ? teams[teams.length - 1].equipoFechaId
+      : null;
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
     return teams.filter(
       (t) =>
         t.equipoNombre.toLowerCase().includes(q) ||
-        t.usuarioNombre.toLowerCase().includes(q)
+        t.usuarioNombre.toLowerCase().includes(q),
     );
   }, [query, teams]);
 
@@ -76,13 +86,17 @@ export default function RankingFechaClient({ title, teams, prevId, nextId, userE
               className="w-full text-left rounded-lg border bg-white shadow-sm p-3 flex items-center justify-between"
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{['🥇', '🥈', '🥉'][idx]}</span>
+                <span className="text-2xl">{["🥇", "🥈", "🥉"][idx]}</span>
                 <div className="space-y-1">
-                  <p className="text-sm font-semibold">{team.equipoNombre}{team.equipoFechaId === lastPlaceId ? ' 💩' : ''}</p>
-                  <p className="text-xs text-gray-600">{team.usuarioNombre}</p>
+                  <p className="text-sm font-semibold">
+                    {team.equipoFechaId === lastPlaceId ? " 💩" : ""}
+                    {team.equipoNombre}
+                  </p>
                 </div>
               </div>
-              <div className="text-lg font-bold text-gray-800">{team.puntajeTotal} pts</div>
+              <div className="text-lg font-bold text-gray-800">
+                {team.puntajeTotal} pts
+              </div>
             </button>
           ))}
         </div>
@@ -96,8 +110,13 @@ export default function RankingFechaClient({ title, teams, prevId, nextId, userE
             >
               <div className="flex items-center gap-2">
                 <span className="w-6 text-right text-gray-500">{idx + 4}.</span>
-                <span className="font-medium">{team.equipoNombre}{team.equipoFechaId === lastPlaceId ? ' 💩' : ''}</span>
-                <span className="text-xs text-gray-500">({team.usuarioNombre})</span>
+                <span className="font-medium">
+                  {team.equipoNombre}
+                  {team.equipoFechaId === lastPlaceId ? " 💩" : ""}
+                </span>
+                <span className="text-xs text-gray-500">
+                  ({team.usuarioNombre})
+                </span>
               </div>
               <span className="font-semibold">{team.puntajeTotal} pts</span>
             </button>
@@ -110,9 +129,15 @@ export default function RankingFechaClient({ title, teams, prevId, nextId, userE
           <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg max-h-[90vh] overflow-y-auto p-4 space-y-4">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-lg font-semibold">{modalTeam.equipoNombre}</p>
-                <p className="text-sm text-gray-600">{modalTeam.usuarioNombre}</p>
-                <p className="text-sm font-semibold mt-1">Total: {modalTeam.puntajeTotal} pts</p>
+                <p className="text-lg font-semibold">
+                  {modalTeam.equipoNombre}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {modalTeam.usuarioNombre}
+                </p>
+                <p className="text-sm font-semibold mt-1">
+                  Total: {modalTeam.puntajeTotal} pts
+                </p>
               </div>
               <button
                 className="text-sm text-gray-500 px-3 py-1 rounded border"
@@ -135,18 +160,22 @@ export default function RankingFechaClient({ title, teams, prevId, nextId, userE
                         posicion: p.posicion,
                         isCapitan: modalTeam.capitanId === p.jugadorId,
                         score:
-                          typeof p.score === 'number'
-                            ? p.score * (modalTeam.capitanId === p.jugadorId ? 2 : 1)
-                            : null
+                          typeof p.score === "number"
+                            ? p.score *
+                              (modalTeam.capitanId === p.jugadorId ? 2 : 1)
+                            : null,
                       }
-                    : null
+                    : null,
                 };
               })}
               onSelectSlot={() => {}}
               onSetCapitan={() => {}}
             />
           </div>
-          <div className="absolute inset-0 -z-10" onClick={() => setModalTeam(null)} />
+          <div
+            className="absolute inset-0 -z-10"
+            onClick={() => setModalTeam(null)}
+          />
         </div>
       )}
     </RankingLayout>
