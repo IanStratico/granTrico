@@ -86,6 +86,7 @@ export default async function RankingFechaPage({ params }: Props) {
       userEmail={session?.user?.email ?? ""}
       userRole={session?.user?.isAdmin ? "admin" : "user"}
       isAdmin={!!session?.user?.isAdmin}
+      estado={fecha.estado}
     />
   );
 }

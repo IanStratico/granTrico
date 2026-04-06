@@ -29,11 +29,16 @@ interface Props {
   userEmail: string;
   userRole: 'admin' | 'user';
   isAdmin: boolean;
+  estado: string;
 }
 
-export default function RankingFechaClient({ title, teams, prevId, nextId, userEmail, userRole, isAdmin }: Props) {
+export default function RankingFechaClient({ title, teams, prevId, nextId, userEmail, userRole, isAdmin, estado }: Props) {
   const [query, setQuery] = useState('');
   const [modalTeam, setModalTeam] = useState<RankingTeamVM | null>(null);
+
+  const lastPlaceId = estado === 'PUNTUADA' && teams.length > 0
+    ? teams[teams.length - 1].equipoFechaId
+    : null;
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
@@ -73,7 +78,7 @@ export default function RankingFechaClient({ title, teams, prevId, nextId, userE
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{['🥇', '🥈', '🥉'][idx]}</span>
                 <div className="space-y-1">
-                  <p className="text-sm font-semibold">{team.equipoNombre}</p>
+                  <p className="text-sm font-semibold">{team.equipoNombre}{team.equipoFechaId === lastPlaceId ? ' 💩' : ''}</p>
                   <p className="text-xs text-gray-600">{team.usuarioNombre}</p>
                 </div>
               </div>
@@ -91,7 +96,7 @@ export default function RankingFechaClient({ title, teams, prevId, nextId, userE
             >
               <div className="flex items-center gap-2">
                 <span className="w-6 text-right text-gray-500">{idx + 4}.</span>
-                <span className="font-medium">{team.equipoNombre}</span>
+                <span className="font-medium">{team.equipoNombre}{team.equipoFechaId === lastPlaceId ? ' 💩' : ''}</span>
                 <span className="text-xs text-gray-500">({team.usuarioNombre})</span>
               </div>
               <span className="font-semibold">{team.puntajeTotal} pts</span>

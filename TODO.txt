@@ -1,0 +1,39 @@
+FEATURES
+- Pantalla con reglas,explicacion de algoritmo para sumar puntos y datos de color. Explicacion de premios
+- Ranking de jugadores por fecha para poder ver quienes fueron los mejores jugadores en cada fecha. 
+    Cuando tocas a cada jugador se despliega un modal que te muestra sus stats
+- fix bug en modal que se despliega en la pantalla ranking fecha para ver el equipo.
+    Cuando lo tocas aparece el equipo pero todo desordenado.
+- Mejorar ui de las cards en pantalla "Mi equipo" y en el modal de "Ranking fecha"
+- Foto de cada jugador en listado para seleccionar y en modal que se despliega tocando cada jugador (y en card?)
+- Si meto fotos en el listado voy a tener que paginar los resultados para hacer la carga de las fotos lazy porque sino revienta
+- Cuando tocas un jugador en el modal de "Ranking fecha" estaria bueno mostrar las stats de ese jugador?
+- Borrar el nombre en gris que aparece en el ranking fecha
+- Agregar patadas metidas/erradas al algoritmo de puntajes
+- Al ultimo de cada fecha agregarle emoji de caca
+- Incorporar app para anotar puntos en los equipos para subir resultados AO VIVO. Charlar con bobi
+
+
+PASE DE BATTALLA
+- Nombre en dorado? multicolor?
+- Sub capitan multiplica por 1.5
+- habilitar tienda de powerups
+- 1 Cambio hasta las 15hs del sabado? o Poder reasignar capitan/subcapitan hasta antes de publicar los resultados?
+
+
+POWERUPS
+- Tackles x2
+- Contratar jugador (franja horaria para que sea mas facil para todos. 
+    Se puede contratar hasta las 22 del viernes, tengo que mostrar tambien quien contrato a quien)
+- Bloquear amarillas
+- Bloquear rojas
+- Cambio de jugador en horario de partidos
+
+PREMIOS
+- Mejor equipo: Multiplicador de tackles para proxima fecha
+- Mejor jugador: un aplauso
+- Mejor equipo de la temporada: algo picante
+
+SPONSORS
+- Podemos publicitar sus negocios a cambio de algo para usar de premio. 
+    Uno distinto cada fecha para sumar al multiplicador de tackles
