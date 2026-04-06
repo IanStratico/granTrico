@@ -111,11 +111,8 @@ export default function RankingFechaClient({
               <div className="flex items-center gap-2">
                 <span className="w-6 text-right text-gray-500">{idx + 4}.</span>
                 <span className="font-medium">
-                  {team.equipoNombre}
                   {team.equipoFechaId === lastPlaceId ? " 💩" : ""}
-                </span>
-                <span className="text-xs text-gray-500">
-                  ({team.usuarioNombre})
+                  {team.equipoNombre}
                 </span>
               </div>
               <span className="font-semibold">{team.puntajeTotal} pts</span>
