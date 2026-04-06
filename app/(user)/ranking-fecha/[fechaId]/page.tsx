@@ -58,14 +58,14 @@ export default async function RankingFechaPage({ params }: Props) {
   );
 
   const teams: RankingTeamVM[] = equipos.map((ef) => {
-    const jugadoresOrdenados = ef.jugadores
+    const jugadoresOrdenados = [...ef.jugadores]
+      .sort((a, b) => a.id - b.id)
       .map((j) => ({
         jugadorId: j.jugadorId,
         nombre: `${j.jugador.apellido}, ${j.jugador.nombre}`,
         posicion: j.jugador.posicion,
         score: scoreMap[j.jugadorId] ?? null,
-      }))
-      .sort((a, b) => a.jugadorId - b.jugadorId);
+      }));
 
     return {
       equipoFechaId: ef.id,
