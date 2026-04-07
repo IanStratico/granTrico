@@ -12,6 +12,7 @@ const userLinks = [
   { href: "/equipo", label: "Mi equipo" },
   { href: "/ranking-fecha", label: "Ranking de la fecha" },
   { href: "/tabla-general", label: "Ranking de temporada" },
+  { href: "/como-jugar", label: "¿Cómo jugar?" },
 ];
 
 const adminLinks = [{ href: "/admin", label: "Admin" }];
