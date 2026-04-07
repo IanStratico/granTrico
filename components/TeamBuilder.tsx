@@ -163,6 +163,9 @@ export default function TeamBuilder({
             posicion: p.posicion,
             isCapitan: capitan === p.jugadorId,
             score: displayScore,
+            apodo: p.apodo ?? undefined,
+            plantel: p.plantel,
+            camada: p.camada != null ? String(p.camada) : undefined,
           }
         : null,
     };
@@ -277,15 +280,31 @@ export default function TeamBuilder({
             </div>
             <div className="flex flex-col gap-2">
               {fechaEstado === "PREVIA" ? (
-                <button
-                  className="w-full rounded-md bg-blue-600 py-2 text-sm font-semibold"
-                  onClick={() => {
-                    setShowDetailModal(false);
-                    setShowSelectorModal(true);
-                  }}
-                >
-                  Cambiar jugador
-                </button>
+                <>
+                  <button
+                    className="w-full rounded-md bg-blue-600 py-2 text-sm font-semibold"
+                    onClick={() => {
+                      setShowDetailModal(false);
+                      setShowSelectorModal(true);
+                    }}
+                  >
+                    Cambiar jugador
+                  </button>
+                  {selectedPlayer.jugadorId === capitan ? (
+                    <p className="text-xs text-amber-400 text-center">Es el capitán actual ⭐</p>
+                  ) : (
+                    <button
+                      className="w-full rounded-md bg-amber-500 py-2 text-sm font-semibold text-black"
+                      onClick={() => {
+                        setCapitan(selectedPlayer.jugadorId);
+                        setShowDetailModal(false);
+                        setSelectedPlayer(null);
+                      }}
+                    >
+                      Hacer capitán
+                    </button>
+                  )}
+                </>
               ) : (
                 <p className="text-xs text-white/70 text-center">
                   La fecha está {fechaEstado.toLowerCase()}. Solo lectura.
