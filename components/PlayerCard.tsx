@@ -1,6 +1,7 @@
 "use client";
 
 import { Posicion } from "@prisma/client";
+import { abrevPlantel } from "@/lib/constants";
 
 interface Props {
   name: string;
@@ -26,14 +27,6 @@ const initials = (text: string) =>
     .map((w) => w[0]?.toUpperCase() ?? "")
     .join("");
 
-const abrevPlantel: Record<string, string> = {
-  PRIMERA: "1ra",
-  INTER: "INT",
-  PRE_A: "PA",
-  PRE_B: "PB",
-  PRE_C: "PC",
-  PRE_D: "PD",
-};
 
 export default function PlayerCard({
   name,
@@ -55,17 +48,7 @@ export default function PlayerCard({
   return (
     <div
       style={{
-        width: 78,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 2,
-      }}
-    >
-      {/* Shield card */}
-      <div
-        style={{
-          clipPath: SHIELD_CLIP,
+        clipPath: SHIELD_CLIP,
           background:
             "linear-gradient(to right, #1a6b3a 33%, #f5f0e0 33% 66%, #1a3a6b 66%)",
           boxShadow: isCapitan
@@ -227,7 +210,6 @@ export default function PlayerCard({
             </span>
           ) : null}
         </div>
-      </div>
     </div>
   );
 }
