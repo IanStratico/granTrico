@@ -11,17 +11,17 @@ export default async function AdminJugadoresPage() {
 
   return (
     <main className="p-4 space-y-4">
-      <h1 className="text-2xl font-semibold">Jugadores</h1>
+      <h1 className="text-2xl font-semibold text-[#c8a951]">Jugadores</h1>
       <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Importar</h2>
+        <h2 className="text-lg font-semibold text-[#c8a951]">Importar</h2>
         <ImportJugadoresForm />
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Exportar</h2>
+        <h2 className="text-lg font-semibold text-[#c8a951]">Exportar</h2>
         <Link
           href="/api/admin/jugadores/export"
-          className="rounded border px-4 py-2 text-base bg-white hover:bg-gray-50 inline-block"
+          className="rounded border border-[#c8a951] px-4 py-2 text-base bg-[#1a3a6b] text-[#f5f0e0] hover:bg-[#1a6b3a] inline-block"
         >
           Exportar jugadores
         </Link>

@@ -43,7 +43,9 @@ export default function EquipoClient({
         nextHref={nextId ? `/equipo?fecha=${nextId}` : null}
         label={`Fecha ${fechaNro} - ${fechaRival}`}
       />
-      <div className="text-xl font-semibold">Mi equipo</div>
+      <div className="text-xl font-semibold" style={{ color: "#c8a951" }}>
+        Mi equipo
+      </div>
       <TeamBuilder
         fechaId={fechaId}
         fechaEstado={fechaEstado}
@@ -53,14 +55,6 @@ export default function EquipoClient({
         initialSelected={initialSelected}
         initialCapitanId={initialCapitan}
       />
-      <div className="mt-1 text-right text-xs">
-        <a
-          href={`/ranking-fecha/${fechaId}`}
-          className="text-blue-600 underline"
-        >
-          Ver ranking de la fecha
-        </a>
-      </div>
     </div>
   );
 }

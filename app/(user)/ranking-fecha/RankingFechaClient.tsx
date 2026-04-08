@@ -70,12 +70,13 @@ export default function RankingFechaClient({
           nextHref={nextId ? `/ranking-fecha/${nextId}` : null}
           label={title}
         />
-        <div className="text-xl font-semibold">Ranking de la fecha</div>
+        <div className="text-xl font-semibold" style={{ color: '#c8a951' }}>Ranking de la fecha</div>
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Buscar equipo o usuario..."
-          className="w-full border rounded px-3 py-2 text-sm"
+          className="w-full rounded px-3 py-2 text-sm"
+          style={{ background: '#1a3a6b', border: '1px solid #c8a951', color: '#f5f0e0' }}
         />
 
         <div className="space-y-2">
@@ -83,18 +84,19 @@ export default function RankingFechaClient({
             <button
               key={team.equipoFechaId}
               onClick={() => setModalTeam(team)}
-              className="w-full text-left rounded-lg border bg-white shadow-sm p-3 flex items-center justify-between"
+              className="w-full text-left rounded-lg p-3 flex items-center justify-between"
+              style={{ background: '#1a3a6b', border: '1px solid #c8a951', color: '#f5f0e0' }}
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{["🥇", "🥈", "🥉"][idx]}</span>
                 <div className="space-y-1">
-                  <p className="text-sm font-semibold">
+                  <p className="text-sm font-semibold" style={{ color: '#f5f0e0' }}>
                     {team.equipoFechaId === lastPlaceId ? " 💩" : ""}
                     {team.equipoNombre}
                   </p>
                 </div>
               </div>
-              <div className="text-lg font-bold text-gray-800">
+              <div className="text-lg font-bold" style={{ color: '#c8a951' }}>
                 {team.puntajeTotal} pts
               </div>
             </button>
@@ -106,16 +108,17 @@ export default function RankingFechaClient({
             <button
               key={team.equipoFechaId}
               onClick={() => setModalTeam(team)}
-              className="w-full flex items-center justify-between rounded border bg-white px-3 py-2 text-sm"
+              className="w-full flex items-center justify-between rounded px-3 py-2 text-sm"
+              style={{ background: '#0d1f35', border: '1px solid #1a3a6b', color: '#f5f0e0' }}
             >
               <div className="flex items-center gap-2">
-                <span className="w-6 text-right text-gray-500">{idx + 4}.</span>
+                <span className="w-6 text-right font-semibold" style={{ color: '#c8a951' }}>{idx + 4}.</span>
                 <span className="font-medium">
                   {team.equipoFechaId === lastPlaceId ? " 💩" : ""}
                   {team.equipoNombre}
                 </span>
               </div>
-              <span className="font-semibold">{team.puntajeTotal} pts</span>
+              <span className="font-semibold" style={{ color: '#c8a951' }}>{team.puntajeTotal} pts</span>
             </button>
           ))}
         </div>
@@ -123,21 +126,22 @@ export default function RankingFechaClient({
 
       {modalTeam && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-3">
-          <div className="w-full max-w-3xl bg-white rounded-lg shadow-lg max-h-[90vh] overflow-y-auto p-4 space-y-4">
+          <div className="w-full max-w-3xl rounded-lg max-h-[90vh] overflow-y-auto p-4 space-y-4" style={{ background: '#0d1f35', boxShadow: '0 0 0 1px #c8a951' }}>
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-lg font-semibold">
+                <p className="text-lg font-semibold" style={{ color: '#c8a951' }}>
                   {modalTeam.equipoNombre}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm" style={{ color: 'rgba(245,240,224,0.7)' }}>
                   {modalTeam.usuarioNombre}
                 </p>
-                <p className="text-sm font-semibold mt-1">
+                <p className="text-sm font-semibold mt-1" style={{ color: 'rgba(245,240,224,0.7)' }}>
                   Total: {modalTeam.puntajeTotal} pts
                 </p>
               </div>
               <button
-                className="text-sm text-gray-500 px-3 py-1 rounded border"
+                className="text-sm px-3 py-1 rounded"
+                style={{ border: '1px solid #c8a951', color: '#f5f0e0', background: 'transparent' }}
                 onClick={() => setModalTeam(null)}
               >
                 Cerrar

@@ -17,21 +17,21 @@ export default async function AdminFechasPage() {
 
   return (
     <main className="p-4 space-y-4">
-      <h1 className="text-2xl font-semibold">Fechas</h1>
+      <h1 className="text-2xl font-semibold text-[#c8a951]">Fechas</h1>
 
       <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Crear fecha</h2>
+        <h2 className="text-lg font-semibold text-[#c8a951]">Crear fecha</h2>
         <CreateFechaForm />
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Listado</h2>
+        <h2 className="text-lg font-semibold text-[#c8a951]">Listado</h2>
         <div className="space-y-2">
           {fechas.map((f) => (
-            <div key={f.id} className="rounded border bg-white px-3 py-2 text-sm flex justify-between">
+            <div key={f.id} className="rounded border border-[#c8a951] bg-[#1a3a6b] px-3 py-2 text-sm flex justify-between">
               <div>
-                <p className="font-semibold">Fecha {f.nro} vs {f.rival}</p>
-                <p className="text-xs text-gray-600">Estado: {f.estado}</p>
+                <p className="font-semibold text-[#f5f0e0]">Fecha {f.nro} vs {f.rival}</p>
+                <p className="text-xs text-[#f5f0e0]">Estado: {f.estado}</p>
               </div>
             </div>
           ))}

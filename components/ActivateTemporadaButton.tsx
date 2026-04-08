@@ -22,7 +22,7 @@ export default function ActivateTemporadaButton({ temporadaId }: { temporadaId: 
     <button
       onClick={activate}
       disabled={loading}
-      className="rounded bg-green-600 text-white px-3 py-2 text-sm disabled:opacity-50"
+      className="rounded bg-[#1a6b3a] border border-[#c8a951] text-[#f5f0e0] px-3 py-2 text-sm disabled:opacity-50"
     >
       {loading ? 'Activando...' : 'Activar'}
     </button>

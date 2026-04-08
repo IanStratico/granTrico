@@ -5,7 +5,16 @@ import { Posicion } from '@prisma/client';
 
 export interface FieldSlot {
   slot: number;
-  player: { id: number; name: string; posicion: Posicion; isCapitan: boolean; score?: number | null } | null;
+  player: {
+    id: number;
+    name: string;
+    posicion: Posicion;
+    isCapitan: boolean;
+    score?: number | null;
+    apodo?: string;
+    plantel?: string;
+    camada?: string;
+  } | null;
 }
 
 interface Props {
@@ -51,14 +60,31 @@ export default function FieldView({
                       onSetCapitan={readonly ? undefined : () => onSetCapitan(p.id)}
                       score={p.score ?? null}
                       readonly={readonly}
+                      apodo={p.apodo}
+                      plantel={p.plantel}
+                      camada={p.camada}
                     />
                   ) : (
                     <div
-                      className="h-[70px] rounded border border-dashed flex flex-col items-center justify-center text-[11px] text-gray-400 bg-white/60 cursor-pointer hover:border-blue-300"
+                      style={{
+                        clipPath: "polygon(0% 12%, 12% 0%, 42% 0%, 50% 9%, 58% 0%, 88% 0%, 100% 12%, 100% 83%, 50% 100%, 0% 83%)",
+                        width: 78,
+                        height: 96,
+                        background: 'rgba(255,255,255,0.5)',
+                        border: '1px dashed #9ca3af',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                        fontSize: 10,
+                        color: '#9ca3af',
+                        gap: 2,
+                      }}
                       onClick={() => onSelectSlot(slot)}
                     >
-                      Vacío
-                      <div className="text-[10px] text-gray-400">#{slot}</div>
+                      <span>Vacío</span>
+                      <span style={{ fontSize: 9 }}>#{slot}</span>
                     </div>
                   )}
                 </div>

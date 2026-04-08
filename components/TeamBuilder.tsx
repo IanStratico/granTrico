@@ -163,6 +163,9 @@ export default function TeamBuilder({
             posicion: p.posicion,
             isCapitan: capitan === p.jugadorId,
             score: displayScore,
+            apodo: p.apodo ?? undefined,
+            plantel: p.plantel,
+            camada: p.camada != null ? String(p.camada) : undefined,
           }
         : null,
     };
@@ -177,21 +180,49 @@ export default function TeamBuilder({
   return (
     <div className="space-y-3">
       {fechaEstado === "PUNTUADA" && typeof totalEquipo === "number" && (
-        <div className="rounded border bg-white px-3 py-2 text-sm font-semibold">
+        <div
+          className="rounded px-3 py-2 text-sm font-semibold"
+          style={{
+            background: "#1a3a6b",
+            border: "1px solid #c8a951",
+            color: "#c8a951",
+          }}
+        >
           Total: {totalEquipo} pts
         </div>
       )}
       {fechaEstado === "CERRADA" && (
-        <div className="rounded border bg-amber-50 text-amber-800 px-3 py-2 text-sm">
+        <div
+          className="rounded px-3 py-2 text-sm"
+          style={{
+            background: "#1a3a6b",
+            color: "#c8a951",
+            border: "1px solid #c8a951",
+          }}
+        >
           La fecha está cerrada. No se puede editar el equipo.
         </div>
       )}
       {fechaEstado === "PUNTUADA" && (
-        <div className="rounded border bg-green-50 text-green-800 px-3 py-2 text-sm">
+        <div
+          className="rounded px-3 py-2 text-sm"
+          style={{
+            background: "#1a6b3a",
+            color: "#f5f0e0",
+            border: "1px solid #c8a951",
+          }}
+        >
           Fecha puntuada. Visualizá los puntajes por jugador.
         </div>
       )}
-      <div className="sticky top-[40px] z-20 bg-gray-50/95 backdrop-blur border-y py-2 px-2 text-sm flex flex-wrap gap-3">
+      <div
+        className="sticky top-[40px] z-20 backdrop-blur border-y py-2 px-2 text-sm flex flex-wrap gap-3"
+        style={{
+          background: "#0d1f35",
+          borderColor: "#c8a951",
+          color: "#f5f0e0",
+        }}
+      >
         <span>{counts.total}/15</span>
         <span>FW {counts.forwards}/8</span>
         <span>BK {counts.backs}/7</span>
@@ -200,7 +231,12 @@ export default function TeamBuilder({
         {Object.entries(counts.porPlantel).map(([plantel, cantidad]) => (
           <span
             key={plantel}
-            className="px-2 py-1 text-xs rounded bg-white text-black"
+            className="px-2 py-1 text-xs rounded"
+            style={{
+              background: "#1a3a6b",
+              border: "1px solid #c8a951",
+              color: "#f5f0e0",
+            }}
           >
             {plantel} {cantidad}
           </span>
@@ -216,9 +252,20 @@ export default function TeamBuilder({
         />
       </div>
 
-      <details className="bg-white border rounded px-3 py-2 text-sm">
-        <summary className="cursor-pointer select-none">Ver reglas</summary>
-        <ul className="list-disc list-inside text-gray-700 mt-2 space-y-1">
+      <details
+        className="rounded px-3 py-2 text-sm"
+        style={{ background: "#1a3a6b", border: "1px solid #c8a951" }}
+      >
+        <summary
+          className="cursor-pointer select-none"
+          style={{ color: "#c8a951" }}
+        >
+          Ver reglas
+        </summary>
+        <ul
+          className="list-disc list-inside mt-2 space-y-1"
+          style={{ color: "#f5f0e0" }}
+        >
           <li>15 jugadores exactos</li>
           <li>Máx 8 forwards, 7 backs</li>
           <li>Máx 4 por plantel</li>
@@ -252,24 +299,51 @@ export default function TeamBuilder({
 
       {showDetailModal && selectedPlayer && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-          <div className="w-full max-w-sm rounded-xl bg-gray-900 text-white p-5 space-y-4">
+          <div
+            className="w-full max-w-sm rounded-xl p-5 space-y-4"
+            style={{
+              background: "#0d1f35",
+              border: "1px solid #c8a951",
+              color: "#f5f0e0",
+            }}
+          >
             <div className="flex items-center gap-3">
-              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center">
-                <span className="text-xs text-white/60">Foto</span>
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center"
+                style={{ background: "rgba(245,240,224,0.1)" }}
+              >
+                <span
+                  className="text-xs"
+                  style={{ color: "rgba(245,240,224,0.5)" }}
+                >
+                  Foto
+                </span>
               </div>
               <div className="flex-1 space-y-1">
-                <div className="text-sm uppercase text-white/70">
+                <div
+                  className="text-sm uppercase"
+                  style={{ color: "rgba(245,240,224,0.7)" }}
+                >
                   {selectedPlayer.apodo || "Sin apodo"}
                 </div>
-                <div className="text-base font-semibold">
+                <div
+                  className="text-base font-semibold"
+                  style={{ color: "#f5f0e0" }}
+                >
                   {selectedPlayer.nombre} {selectedPlayer.apellido}
                 </div>
-                <div className="text-xs text-white/70">
+                <div
+                  className="text-xs"
+                  style={{ color: "rgba(245,240,224,0.7)" }}
+                >
                   {selectedPlayer.plantel} ·{" "}
                   {selectedPlayer.posicion === "FORWARD" ? "FW" : "BK"}
                 </div>
                 {selectedPlayer.camada && (
-                  <div className="text-xs text-white/60">
+                  <div
+                    className="text-xs"
+                    style={{ color: "rgba(245,240,224,0.6)" }}
+                  >
                     Camada {selectedPlayer.camada}
                   </div>
                 )}
@@ -277,22 +351,57 @@ export default function TeamBuilder({
             </div>
             <div className="flex flex-col gap-2">
               {fechaEstado === "PREVIA" ? (
-                <button
-                  className="w-full rounded-md bg-blue-600 py-2 text-sm font-semibold"
-                  onClick={() => {
-                    setShowDetailModal(false);
-                    setShowSelectorModal(true);
-                  }}
-                >
-                  Cambiar jugador
-                </button>
+                <>
+                  <button
+                    className="w-full rounded-md py-2 text-sm font-semibold"
+                    style={{
+                      background: "#1a6b3a",
+                      border: "1px solid #c8a951",
+                      color: "#f5f0e0",
+                    }}
+                    onClick={() => {
+                      setShowDetailModal(false);
+                      setShowSelectorModal(true);
+                    }}
+                  >
+                    Cambiar jugador
+                  </button>
+                  {selectedPlayer.jugadorId === capitan ? (
+                    <p
+                      className="text-xs text-center"
+                      style={{ color: "#c8a951" }}
+                    >
+                      Es el capitán actual ⭐
+                    </p>
+                  ) : (
+                    <button
+                      className="w-full rounded-md py-2 text-sm font-semibold"
+                      style={{ background: "#c8a951", color: "#000" }}
+                      onClick={() => {
+                        setCapitan(selectedPlayer.jugadorId);
+                        setShowDetailModal(false);
+                        setSelectedPlayer(null);
+                      }}
+                    >
+                      Hacer capitán
+                    </button>
+                  )}
+                </>
               ) : (
-                <p className="text-xs text-white/70 text-center">
+                <p
+                  className="text-xs text-center"
+                  style={{ color: "rgba(245,240,224,0.7)" }}
+                >
                   La fecha está {fechaEstado.toLowerCase()}. Solo lectura.
                 </p>
               )}
               <button
-                className="w-full rounded-md border border-white/30 py-2 text-sm"
+                className="w-full rounded-md py-2 text-sm"
+                style={{
+                  border: "1px solid #c8a951",
+                  color: "#f5f0e0",
+                  background: "transparent",
+                }}
                 onClick={() => {
                   setShowDetailModal(false);
                   setSelectedPlayer(null);
@@ -309,7 +418,12 @@ export default function TeamBuilder({
         <button
           onClick={submit}
           disabled={loading}
-          className="rounded bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 disabled:opacity-50"
+          className="rounded px-4 py-2 disabled:opacity-50"
+          style={{
+            background: "#1a6b3a",
+            border: "1px solid #c8a951",
+            color: "#f5f0e0",
+          }}
         >
           {loading ? "Guardando..." : "Confirmar equipo"}
         </button>

@@ -31,7 +31,7 @@ export default function CreateFechaForm() {
         onChange={(e) => setNro(e.target.value === '' ? '' : Number(e.target.value))}
         placeholder="Nro"
         required
-        className="border rounded px-3 py-2 text-base w-full"
+        className="border border-[#c8a951] rounded px-3 py-2 text-base w-full bg-[#1a3a6b] text-[#f5f0e0] placeholder-[#f5f0e0]/50"
       />
       <input
         type="text"
@@ -39,9 +39,9 @@ export default function CreateFechaForm() {
         onChange={(e) => setRival(e.target.value)}
         placeholder="Rival"
         required
-        className="border rounded px-3 py-2 text-base w-full"
+        className="border border-[#c8a951] rounded px-3 py-2 text-base w-full bg-[#1a3a6b] text-[#f5f0e0] placeholder-[#f5f0e0]/50"
       />
-      <button className="rounded bg-blue-600 text-white px-4 py-2 text-base disabled:opacity-50" disabled={loading}>
+      <button className="rounded bg-[#1a6b3a] border border-[#c8a951] text-[#f5f0e0] px-4 py-2 text-base disabled:opacity-50" disabled={loading}>
         {loading ? 'Creando...' : 'Crear'}
       </button>
     </form>
