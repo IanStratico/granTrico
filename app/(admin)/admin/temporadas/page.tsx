@@ -12,24 +12,24 @@ export default async function AdminTemporadasPage() {
 
   return (
     <main className="p-4 space-y-4">
-      <h1 className="text-2xl font-semibold">Temporadas</h1>
+      <h1 className="text-2xl font-semibold text-[#c8a951]">Temporadas</h1>
 
       <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Crear temporada</h2>
+        <h2 className="text-lg font-semibold text-[#c8a951]">Crear temporada</h2>
         <CreateTemporadaForm />
       </section>
 
       <section className="space-y-2">
-        <h2 className="text-lg font-semibold">Listado</h2>
+        <h2 className="text-lg font-semibold text-[#c8a951]">Listado</h2>
         <div className="space-y-2">
           {temporadas.map((t) => (
-            <div key={t.id} className="rounded border bg-white px-3 py-2 text-sm flex items-center justify-between">
+            <div key={t.id} className="rounded border border-[#c8a951] bg-[#1a3a6b] px-3 py-2 text-sm flex items-center justify-between">
               <div>
-                <p className="font-semibold">{t.nombre}</p>
-                <p className="text-xs text-gray-600">{t.activa ? 'Activa' : 'Inactiva'}</p>
+                <p className="font-semibold text-[#f5f0e0]">{t.nombre}</p>
+                <p className="text-xs text-[#f5f0e0]">{t.activa ? 'Activa' : 'Inactiva'}</p>
               </div>
               {!t.activa && <ActivateTemporadaButton temporadaId={t.id} />}
-              {t.activa && <span className="text-xs font-semibold text-green-700 px-2 py-1">Activa</span>}
+              {t.activa && <span className="text-xs font-semibold text-[#c8a951] px-2 py-1">Activa</span>}
             </div>
           ))}
         </div>

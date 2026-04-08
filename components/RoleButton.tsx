@@ -26,7 +26,7 @@ export default function RoleButton({ userId, isAdmin }: Props) {
       <button
         disabled={loading}
         onClick={() => updateRole('USER')}
-        className="rounded bg-gray-200 px-3 py-1 text-xs disabled:opacity-50"
+        className="rounded bg-[#0d1f35] border border-[#c8a951] text-[#f5f0e0] px-3 py-1 text-xs disabled:opacity-50"
       >
         Quitar admin
       </button>
@@ -37,7 +37,7 @@ export default function RoleButton({ userId, isAdmin }: Props) {
     <button
       disabled={loading}
       onClick={() => updateRole('ADMIN')}
-      className="rounded bg-blue-600 text-white px-3 py-1 text-xs disabled:opacity-50"
+      className="rounded bg-[#1a6b3a] border border-[#c8a951] text-[#f5f0e0] px-3 py-1 text-xs disabled:opacity-50"
     >
       Hacer admin
     </button>

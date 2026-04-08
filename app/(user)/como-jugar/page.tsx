@@ -7,11 +7,21 @@ export default async function ComoJugarPage() {
 
   return (
     <main className="space-y-6 max-w-2xl">
-      <h1 className="text-2xl font-semibold">¿Cómo jugar?</h1>
+      <h1 className="text-2xl font-semibold" style={{ color: "#c8a951" }}>
+        ¿Cómo jugar?
+      </h1>
 
-      <section className="rounded-lg border bg-white p-5 space-y-3">
-        <h2 className="text-base font-semibold">Cómo armar tu equipo</h2>
-        <ul className="space-y-2 text-sm text-gray-700 list-disc list-inside">
+      <section
+        className="rounded-lg p-5 space-y-3"
+        style={{ background: "#1a3a6b", border: "1px solid #c8a951" }}
+      >
+        <h2 className="text-base font-semibold" style={{ color: "#c8a951" }}>
+          Cómo armar tu equipo
+        </h2>
+        <ul
+          className="space-y-2 text-sm list-disc list-inside"
+          style={{ color: "#f5f0e0" }}
+        >
           <li>
             Seleccioná exactamente <strong>15 jugadores</strong> del plantel
             convocado.
@@ -31,27 +41,38 @@ export default async function ComoJugarPage() {
         </ul>
       </section>
 
-      <section className="rounded-lg border bg-white p-5 space-y-3">
-        <h2 className="text-base font-semibold">Etapas de una fecha</h2>
-        <div className="space-y-3 text-sm text-gray-700">
+      <section
+        className="rounded-lg p-5 space-y-3"
+        style={{ background: "#1a3a6b", border: "1px solid #c8a951" }}
+      >
+        <h2 className="text-base font-semibold" style={{ color: "#c8a951" }}>
+          Etapas de una fecha
+        </h2>
+        <div className="space-y-3 text-sm" style={{ color: "#f5f0e0" }}>
           <div className="flex gap-3">
             <span className="mt-0.5 h-2 w-2 rounded-full bg-blue-400 flex-shrink-0 mt-1.5" />
             <div>
-              <p className="font-medium text-gray-900">PREVIA</p>
+              <p className="font-medium" style={{ color: "#f5f0e0" }}>
+                PREVIA
+              </p>
               <p>Podés armar y editar tu equipo libremente.</p>
             </div>
           </div>
           <div className="flex gap-3">
             <span className="mt-0.5 h-2 w-2 rounded-full bg-amber-400 flex-shrink-0 mt-1.5" />
             <div>
-              <p className="font-medium text-gray-900">CERRADA</p>
+              <p className="font-medium" style={{ color: "#f5f0e0" }}>
+                CERRADA
+              </p>
               <p>Ya no se puede editar el equipo. El partido está en juego.</p>
             </div>
           </div>
           <div className="flex gap-3">
             <span className="mt-0.5 h-2 w-2 rounded-full bg-green-400 flex-shrink-0 mt-1.5" />
             <div>
-              <p className="font-medium text-gray-900">PUNTUADA</p>
+              <p className="font-medium" style={{ color: "#f5f0e0" }}>
+                PUNTUADA
+              </p>
               <p>
                 Se publican los puntajes de cada jugador y el ranking de la
                 fecha.
@@ -61,12 +82,27 @@ export default async function ComoJugarPage() {
         </div>
       </section>
 
-      <section className="rounded-lg border bg-white p-5 space-y-3">
-        <h2 className="text-base font-semibold">Cómo se calculan los puntos</h2>
-        <div className="rounded bg-gray-50 border px-4 py-3 text-sm font-mono text-gray-800">
+      <section
+        className="rounded-lg p-5 space-y-3"
+        style={{ background: "#1a3a6b", border: "1px solid #c8a951" }}
+      >
+        <h2 className="text-base font-semibold" style={{ color: "#c8a951" }}>
+          Cómo se calculan los puntos
+        </h2>
+        <div
+          className="rounded px-4 py-3 text-sm font-mono"
+          style={{
+            background: "#0d1f35",
+            border: "1px solid #c8a951",
+            color: "#f5f0e0",
+          }}
+        >
           tries×10 + tackles − knockOns×2 − penales×2 − amarillas×5 − rojas×10
         </div>
-        <ul className="space-y-1 text-sm text-gray-700 list-disc list-inside">
+        <ul
+          className="space-y-1 text-sm list-disc list-inside"
+          style={{ color: "#f5f0e0" }}
+        >
           <li>
             El <strong>capitán</strong> suma su puntaje dos veces.
           </li>

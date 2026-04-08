@@ -63,21 +63,21 @@ export default function AdminFechaClient({
           nextHref={nextId ? `/admin/fecha/${nextId}` : null}
           label={`Fecha ${fechaNro} - ${fechaRival}`}
         />
-        <div className="text-xl font-semibold">Admin</div>
+        <div className="text-xl font-semibold text-[#c8a951]">Admin</div>
 
         <section className="space-y-2">
-          <h2 className="text-lg font-semibold">Estado de la fecha</h2>
+          <h2 className="text-lg font-semibold text-[#c8a951]">Estado de la fecha</h2>
           <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span className="px-3 py-1 rounded border bg-white shadow-sm">
+            <span className="px-3 py-1 rounded border border-[#c8a951] bg-[#1a3a6b] text-[#f5f0e0] shadow-sm">
               Estado: {estadoLabel}
             </span>
             {(["PREVIA", "CERRADA", "PUNTUADA"] as const).map((estadoBtn) => (
               <button
                 key={estadoBtn}
-                className={`rounded px-3 py-2 text-sm border ${
+                className={`rounded px-3 py-2 text-sm border border-[#c8a951] ${
                   estadoBtn === currentEstado
-                    ? "bg-gray-200 text-gray-600 cursor-not-allowed"
-                    : "bg-blue-600 text-white"
+                    ? "bg-[#0d1f35] text-[#f5f0e0]/40 cursor-not-allowed"
+                    : "bg-[#1a6b3a] text-[#f5f0e0]"
                 }`}
                 disabled={estadoBtn === currentEstado || changing}
                 onClick={() => changeEstado(estadoBtn)}
@@ -90,11 +90,11 @@ export default function AdminFechaClient({
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-lg font-semibold">Convocados</h2>
+          <h2 className="text-lg font-semibold text-[#c8a951]">Convocados</h2>
           <div className="flex flex-wrap gap-3 text-sm items-start">
             <Link
               href={`/api/admin/convocados/export?fechaId=${fechaId}`}
-              className="rounded border px-3 py-2 bg-white hover:bg-gray-50"
+              className="rounded border border-[#c8a951] px-3 py-2 bg-[#1a3a6b] text-[#f5f0e0] hover:bg-[#1a6b3a]"
             >
               Exportar convocados
             </Link>
@@ -104,17 +104,17 @@ export default function AdminFechaClient({
               extraFields={{ fechaId }}
             />
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-[#f5f0e0]/60">
             Lee columnas: id, plantel (ignora el resto)
           </p>
         </section>
 
         <section className="space-y-2">
-          <h2 className="text-lg font-semibold">Puntajes</h2>
+          <h2 className="text-lg font-semibold text-[#c8a951]">Puntajes</h2>
           <div className="flex flex-wrap gap-3 text-sm items-start">
             <Link
               href={`/api/admin/puntajes/export?fechaId=${fechaId}`}
-              className="rounded border px-3 py-2 bg-white hover:bg-gray-50"
+              className="rounded border border-[#c8a951] px-3 py-2 bg-[#1a3a6b] text-[#f5f0e0] hover:bg-[#1a6b3a]"
             >
               Exportar puntajes
             </Link>
@@ -124,7 +124,7 @@ export default function AdminFechaClient({
               extraFields={{ fechaId }}
             />
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-[#f5f0e0]/60">
             Lee columnas: id, tries, tackles, knock_ons, penales, amarillas,
             rojas (ignora el resto)
           </p>

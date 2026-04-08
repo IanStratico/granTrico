@@ -27,28 +27,33 @@ export default function AppShell({ isAdmin, children }: Props) {
   return (
     <div className="min-h-screen flex">
       {/* Topbar global (mobile y desktop) */}
-      <div className="fixed top-0 left-0 right-0 z-30 bg-white/95 backdrop-blur border-b">
+      <div className="fixed top-0 left-0 right-0 z-30 border-b" style={{ background: 'linear-gradient(to right, #1a6b3a, #1a3a6b)', borderBottomColor: '#c8a951' }}>
         <div className="flex items-center justify-between px-3 py-2">
           <button
-            className="inline-flex items-center justify-center w-9 h-9 rounded border bg-white shadow-sm text-sm"
+            className="inline-flex items-center justify-center w-9 h-9 rounded text-sm text-white"
+            style={{ border: '1px solid #c8a951', background: 'transparent' }}
             onClick={() => setOpen(true)}
             aria-label="Menu"
           >
             ☰
           </button>
-          <div className="text-base font-semibold">Trico Fantasy</div>
+          <div className="text-base font-semibold" style={{ color: '#c8a951' }}>Trico Fantasy</div>
           <div className="relative" ref={userRef}>
             <button
-              className="inline-flex items-center justify-center w-9 h-9 rounded-full border bg-white shadow-sm"
+              className="inline-flex items-center justify-center w-9 h-9 rounded-full text-white"
+              style={{ border: '1px solid #c8a951', background: 'transparent' }}
               onClick={() => setUserOpen((v) => !v)}
               aria-label="Usuario"
             >
               👤
             </button>
             {userOpen && (
-              <div className="absolute right-0 mt-2 w-40 rounded border bg-white shadow-lg text-sm z-50">
+              <div className="absolute right-0 mt-2 w-40 rounded shadow-lg text-sm z-50" style={{ background: '#1a3a6b', border: '1px solid #c8a951' }}>
                 <button
-                  className="w-full text-left px-3 py-2 hover:bg-gray-100"
+                  className="w-full text-left px-3 py-2 text-white transition-colors"
+                  style={{}}
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#1a6b3a'; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}
                   onClick={() => signOut({ callbackUrl: '/login' })}
                 >
                   Cerrar sesión
@@ -67,10 +72,10 @@ export default function AppShell({ isAdmin, children }: Props) {
       {/* Drawer mobile */}
       {open && (
         <div className="fixed inset-0 z-40 flex">
-          <div className="w-4/5 max-w-xs bg-white shadow-lg">
+          <div className="w-4/5 max-w-xs bg-[#1a3a6b] shadow-lg">
             <Sidebar isAdmin={isAdmin} onNavigate={() => setOpen(false)} />
           </div>
-          <div className="flex-1 bg-black/30" onClick={() => setOpen(false)} />
+          <div className="flex-1 bg-black/50" onClick={() => setOpen(false)} />
         </div>
       )}
 

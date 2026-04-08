@@ -39,12 +39,12 @@ export default function ImportButton({ label, endpoint, extraFields }: Props) {
       <button
         onClick={handleUpload}
         disabled={loading || !file}
-        className="rounded bg-blue-600 text-white px-3 py-2 text-sm disabled:opacity-50"
+        className="rounded bg-[#1a6b3a] border border-[#c8a951] text-[#f5f0e0] px-3 py-2 text-sm disabled:opacity-50"
       >
         {loading ? 'Procesando...' : label}
       </button>
       {result && (
-        <div className="text-xs text-gray-800 space-y-1">
+        <div className="text-xs text-[#f5f0e0] space-y-1">
           <p>Procesados: {result.procesados ?? 0}</p>
           <p>Errores: {result.errores ? result.errores.length : 0}</p>
           {result.errores && result.errores.length > 0 && (

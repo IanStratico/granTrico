@@ -8,7 +8,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <html lang="es">
-      <body className="min-h-screen bg-gray-50 text-gray-900 antialiased">
+      <body className="min-h-screen text-gray-900 antialiased" style={{ background: '#0d1f35' }}>
         {session?.user ? (
           <AppShell isAdmin={session.user.isAdmin}>{children}</AppShell>
         ) : (
