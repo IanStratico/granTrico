@@ -47,6 +47,7 @@ export default async function RankingFechaPage({ params }: Props) {
       jugadorId: true,
       puntajeCalculado: true,
       puntajeOverride: true,
+      plantel: true,
     },
   });
 
@@ -57,6 +58,10 @@ export default async function RankingFechaPage({ params }: Props) {
     ]),
   );
 
+  const plantelMap = Object.fromEntries(
+    jugadorFechas.map((jf) => [jf.jugadorId, jf.plantel]),
+  );
+
   const teams: RankingTeamVM[] = equipos.map((ef) => {
     const jugadoresOrdenados = [...ef.jugadores]
       .sort((a, b) => a.id - b.id)
@@ -65,6 +70,9 @@ export default async function RankingFechaPage({ params }: Props) {
         nombre: `${j.jugador.apellido}, ${j.jugador.nombre}`,
         posicion: j.jugador.posicion,
         score: scoreMap[j.jugadorId] ?? null,
+        apodo: j.jugador.apodo ?? null,
+        plantel: plantelMap[j.jugadorId] ?? null,
+        camada: j.jugador.camada != null ? String(j.jugador.camada) : null,
       }));
 
     return {
