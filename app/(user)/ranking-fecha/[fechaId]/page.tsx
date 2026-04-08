@@ -23,33 +23,34 @@ export default async function RankingFechaPage({ params }: Props) {
   });
   if (!fecha) notFound();
 
-  const fechas = await prisma.fecha.findMany({
-    where: { temporadaId: fecha.temporadaId },
-    orderBy: { nro: "asc" },
-  });
+  const [fechas, equipos, jugadorFechas] = await Promise.all([
+    prisma.fecha.findMany({
+      where: { temporadaId: fecha.temporadaId },
+      orderBy: { nro: "asc" },
+    }),
+    prisma.equipoFecha.findMany({
+      where: { fechaId },
+      orderBy: { puntajeTotal: "desc" },
+      include: {
+        equipo: { include: { usuario: true } },
+        jugadores: { include: { jugador: true } },
+      },
+    }),
+    prisma.jugadorFecha.findMany({
+      where: { fechaId },
+      select: {
+        jugadorId: true,
+        puntajeCalculado: true,
+        puntajeOverride: true,
+        plantel: true,
+      },
+    }),
+  ]);
+
   const index = fechas.findIndex((f) => f.id === fecha.id);
   const prev = index > 0 ? fechas[index - 1] : null;
   const next =
     index >= 0 && index < fechas.length - 1 ? fechas[index + 1] : null;
-
-  const equipos = await prisma.equipoFecha.findMany({
-    where: { fechaId },
-    orderBy: { puntajeTotal: "desc" },
-    include: {
-      equipo: { include: { usuario: true } },
-      jugadores: { include: { jugador: true } },
-    },
-  });
-
-  const jugadorFechas = await prisma.jugadorFecha.findMany({
-    where: { fechaId },
-    select: {
-      jugadorId: true,
-      puntajeCalculado: true,
-      puntajeOverride: true,
-      plantel: true,
-    },
-  });
 
   const scoreMap = Object.fromEntries(
     jugadorFechas.map((jf) => [

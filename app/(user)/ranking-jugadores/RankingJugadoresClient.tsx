@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import FechaSwitcher from '@/components/FechaSwitcher';
+import { abrevPlantel } from '@/lib/constants';
 
 interface JugadorVM {
   jugadorId: number;
@@ -28,9 +29,6 @@ interface Props {
   jugadores: JugadorVM[];
 }
 
-const abrevPlantel: Record<string, string> = {
-  PRIMERA: '1ra', INTER: 'INT', PRE_A: 'PA', PRE_B: 'PB', PRE_C: 'PC', PRE_D: 'PD',
-};
 
 export default function RankingJugadoresClient({ title, estado, prevId, nextId, jugadores }: Props) {
   const [query, setQuery] = useState('');

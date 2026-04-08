@@ -20,18 +20,22 @@ export default async function RankingJugadoresPage({ params }: Props) {
   });
   if (!fecha) notFound();
 
-  const fechas = await prisma.fecha.findMany({
-    where: { temporadaId: activa.id },
-    orderBy: { nro: 'asc' },
-  });
+  const [fechas, jugadorFechasRaw] = await Promise.all([
+    prisma.fecha.findMany({
+      where: { temporadaId: activa.id },
+      orderBy: { nro: 'asc' },
+    }),
+    prisma.jugadorFecha.findMany({
+      where: { fechaId },
+      include: { jugador: true },
+    }),
+  ]);
+
   const index = fechas.findIndex((f) => f.id === fecha.id);
   const prev = index > 0 ? fechas[index - 1] : null;
   const next = index >= 0 && index < fechas.length - 1 ? fechas[index + 1] : null;
 
-  const jugadorFechas = (await prisma.jugadorFecha.findMany({
-    where: { fechaId },
-    include: { jugador: true },
-  })).filter((jf) => jf.plantel !== null);
+  const jugadorFechas = jugadorFechasRaw.filter((jf) => jf.plantel !== null);
 
   const jugadores = jugadorFechas
     .map((jf) => ({
