@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import InstallBanner from "@/components/InstallBanner";
 
 const abrevPlantel: Record<string, string> = {
   PRIMERA: "Primera",
@@ -136,6 +137,7 @@ export default async function HomePage() {
 
   return (
     <main className="py-4 space-y-4">
+      <InstallBanner />
       {/* Header fecha */}
       {ultimaFecha ? (
         <section style={cardStyle} className="flex items-center justify-between">
