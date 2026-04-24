@@ -3,6 +3,8 @@
 import { signIn } from 'next-auth/react';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -14,66 +16,98 @@ export default function LoginPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const res = await signIn('credentials', { redirect: false, email, password, callbackUrl: '/post-login' });
+    setError('');
+    const res = await signIn('credentials', { redirect: false, email, password });
     if (res?.error) {
-      setError('Credenciales inválidas');
+      setError('Email o contraseña incorrectos');
+      setLoading(false);
     } else {
       router.push('/post-login');
       router.refresh();
     }
-    setLoading(false);
   };
 
   return (
-    <main className="max-w-md mx-auto bg-white shadow-sm rounded p-6 space-y-4">
-      <div>
-        <h1 className="text-2xl font-semibold">Login</h1>
-        <p className="text-sm text-gray-600">Accedé con email y contraseña.</p>
-      </div>
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="email">
-            Email
-          </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            required
-            className="w-full rounded border px-3 py-2"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <div
+      className="min-h-screen flex flex-col items-center justify-center px-4 py-12"
+      style={{ background: '#0d1f35' }}
+    >
+      <div className="w-full max-w-sm space-y-8">
+        {/* Logo + título */}
+        <div className="flex flex-col items-center gap-3">
+          <Image src="/logo.png" alt="GranTrico" width={72} height={72} className="rounded-xl" />
+          <div className="text-center">
+            <h1 className="text-2xl font-bold" style={{ color: '#c8a951' }}>Trico Fantasy</h1>
+            <p className="text-sm mt-0.5" style={{ color: 'rgba(245,240,224,0.55)' }}>Fantasy rugby del club</p>
+          </div>
         </div>
-        <div className="space-y-1">
-          <label className="text-sm font-medium" htmlFor="password">
-            Contraseña
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            required
-            className="w-full rounded border px-3 py-2"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <button
-          type="submit"
-          className="w-full rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition disabled:opacity-50"
-          disabled={loading}
+
+        {/* Card */}
+        <div
+          className="rounded-2xl p-6 space-y-5"
+          style={{ background: '#1a3a6b', border: '1px solid #c8a951' }}
         >
-          {loading ? 'Ingresando...' : 'Ingresar'}
-        </button>
-        <div className="text-center text-sm text-gray-700 space-x-1">
-          <span>¿No tenés cuenta?</span>
-          <a href="/register" className="text-blue-600 underline">
-            Registrate
-          </a>
+          <h2 className="text-lg font-semibold" style={{ color: '#f5f0e0' }}>Iniciar sesión</h2>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium uppercase tracking-wide" style={{ color: 'rgba(245,240,224,0.6)' }} htmlFor="email">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-lg px-4 py-3 text-sm outline-none"
+                style={{ background: '#0d1f35', border: '1px solid rgba(200,169,81,0.5)', color: '#f5f0e0' }}
+                placeholder="tu@email.com"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium uppercase tracking-wide" style={{ color: 'rgba(245,240,224,0.6)' }} htmlFor="password">
+                Contraseña
+              </label>
+              <input
+                id="password"
+                type="password"
+                required
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-lg px-4 py-3 text-sm outline-none"
+                style={{ background: '#0d1f35', border: '1px solid rgba(200,169,81,0.5)', color: '#f5f0e0' }}
+                placeholder="••••••••"
+              />
+            </div>
+
+            {error && (
+              <p className="text-sm rounded-lg px-3 py-2" style={{ background: 'rgba(239,68,68,0.15)', color: '#fca5a5', border: '1px solid rgba(239,68,68,0.3)' }}>
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full rounded-lg py-3 text-sm font-semibold disabled:opacity-50 transition-opacity"
+              style={{ background: '#1a6b3a', border: '1px solid #c8a951', color: '#f5f0e0' }}
+            >
+              {loading ? 'Ingresando...' : 'Ingresar'}
+            </button>
+          </form>
         </div>
-      </form>
-    </main>
+
+        <p className="text-center text-sm" style={{ color: 'rgba(245,240,224,0.55)' }}>
+          ¿No tenés cuenta?{' '}
+          <Link href="/register" style={{ color: '#c8a951' }}>
+            Registrate
+          </Link>
+        </p>
+      </div>
+    </div>
   );
 }
