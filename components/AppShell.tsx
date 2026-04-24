@@ -79,7 +79,7 @@ export default function AppShell({ isAdmin, children }: Props) {
         </div>
       )}
 
-      <main className="flex-1 w-full pt-14 md:pt-0 px-3 md:px-6">{children}</main>
+      <main className="flex-1 w-full pt-14 px-3 md:px-6">{children}</main>
     </div>
   );
 }

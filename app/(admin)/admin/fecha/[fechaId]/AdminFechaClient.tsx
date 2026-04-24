@@ -52,20 +52,28 @@ export default function AdminFechaClient({
 
   const [convocados, setConvocados] = useState<Convocado[]>(initialConvocados);
   const [query, setQuery] = useState('');
+  const [soloSinPos, setSoloSinPos] = useState(false);
   const [editTarget, setEditTarget] = useState<Convocado | null>(null);
   const [editForm, setEditForm] = useState<Partial<Convocado>>({});
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  const sinPosCount = useMemo(
+    () => convocados.filter((c) => c.posicion === 'FORWARD' || c.posicion === 'BACK').length,
+    [convocados]
+  );
+
   const filtered = useMemo(() => {
     const q = query.toLowerCase();
-    return convocados.filter(
-      (c) =>
+    return convocados.filter((c) => {
+      if (soloSinPos && c.posicion !== 'FORWARD' && c.posicion !== 'BACK') return false;
+      return (
         c.nombre.toLowerCase().includes(q) ||
         c.apellido.toLowerCase().includes(q) ||
         c.apodo.toLowerCase().includes(q)
-    );
-  }, [convocados, query]);
+      );
+    });
+  }, [convocados, query, soloSinPos]);
 
   const openEdit = (c: Convocado) => {
     setEditTarget(c);
@@ -197,13 +205,26 @@ export default function AdminFechaClient({
           <h2 className="text-lg font-semibold text-[#c8a951]">
             Jugadores convocados ({convocados.length})
           </h2>
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Buscar por nombre o apodo..."
-            className="w-full rounded px-3 py-2 text-sm outline-none"
-            style={{ background: '#1a3a6b', border: '1px solid #c8a951', color: '#f5f0e0' }}
-          />
+          <div className="flex gap-2 items-center">
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Buscar por nombre o apodo..."
+              className="flex-1 rounded px-3 py-2 text-sm outline-none"
+              style={{ background: '#1a3a6b', border: '1px solid #c8a951', color: '#f5f0e0' }}
+            />
+            <button
+              onClick={() => setSoloSinPos((v) => !v)}
+              className="rounded px-3 py-2 text-xs font-semibold whitespace-nowrap"
+              style={{
+                background: soloSinPos ? '#7c2d12' : 'transparent',
+                border: '1px solid #c8a951',
+                color: soloSinPos ? '#fca5a5' : '#c8a951',
+              }}
+            >
+              sin pos. {sinPosCount > 0 && `(${sinPosCount})`}
+            </button>
+          </div>
           <div className="space-y-1">
             {filtered.map((c) => (
               <div
@@ -216,13 +237,18 @@ export default function AdminFechaClient({
                     {c.apellido}, {c.nombre}
                     {c.apodo ? <span style={{ color: 'rgba(245,240,224,0.5)' }}> · {c.apodo}</span> : null}
                   </span>
-                  <div className="flex gap-2 mt-0.5">
+                  <div className="flex gap-2 mt-0.5 flex-wrap">
                     <span className="text-[11px] px-1.5 rounded" style={{ background: '#1a3a6b', color: '#c8a951' }}>
                       {c.plantel}
                     </span>
                     <span className="text-[11px]" style={{ color: 'rgba(245,240,224,0.5)' }}>
                       {labelPosicion[c.posicion] ?? c.posicion}
                     </span>
+                    {(c.posicion === 'FORWARD' || c.posicion === 'BACK') && (
+                      <span className="text-[10px] px-1.5 rounded font-semibold" style={{ background: '#7c2d12', color: '#fca5a5' }}>
+                        sin pos.
+                      </span>
+                    )}
                   </div>
                 </div>
                 <button

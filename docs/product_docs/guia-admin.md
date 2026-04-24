@@ -1,6 +1,6 @@
 # Guía del administrador — GranTrico Fantasy
 
-Basada en explicación de Ian. Para uso interno del admin del club.
+Basada en explicación de Ian y Marzullo. Para uso interno del admin del club.
 
 ---
 
@@ -28,65 +28,109 @@ Desde esa pantalla se puede cambiar el estado de la fecha:
 
 ---
 
-### Convocados
+## Flujo completo de una fecha nueva
 
-1. Tocar **Exportar convocados** → descarga un CSV con todos los jugadores que alguna vez jugaron un partido cargado en el sistema.
-2. En la última columna (`plantel`) completar el equipo en el que está cada jugador para esa fecha:
-   - `PRIMERA` — Primera
-   - `INTER` — Intermedia
-   - `PRE_A` — Pre A
-   - `PRE_B` — Pre B
-   - `PRE_C` — Pre C
-   - `PRE_D` — Pre D
-3. Tocar **Importar convocados** y subir el CSV modificado.
+```
+1. Crear fecha en /admin/fechas
+2. Procesar la planilla de Marcelo → importar convocados
+3. Revisar y asignar posiciones faltantes ("sin pos.")
+4. Estado: PREVIA  →  usuarios arman su equipo (capitán + pateador)
+5. Estado: CERRADA  →  arranca el partido
+6. Exportar puntajes → completar estadísticas → importar puntajes
+7. Verificar puntajes en /admin/estadísticas/[fechaId]
+8. Estado: PUNTUADA  →  se publican resultados y ranking
+```
 
-Solo van los jugadores convocados para esa fecha. Los que no estén en el archivo no aparecen disponibles para los usuarios.
+---
 
-#### Cómo armar la lista de convocados desde la planilla de Marcelo
+## Convocados
+
+### Cómo armar la lista desde la planilla de Marcelo
 
 La planilla de Marcelo tiene **6 columnas en paralelo**, una por plantel:
 
 ```
-| #  | Primera          | #  | Intermedia        | #  | Pre-A   | #  | Pre-B  | #  | Pre-C  | #  | Pre-D  |
-|----|------------------|----|-------------------|----|---------|...
+| #  | Primera          | #  | Intermedia        | #  | Pre-A   | ...
+|----|------------------|----|-------------------|----|---------|
 | 1  | Roman Osella     | 1  | Yago Mosquera     | 1  | ...     |
 | 2  | Franco Cammaratta| 2  | Ignacio Marino    | 2  | ...     |
 | ...                                                            |
 | 15 | Juan Almandoz    | 15 | Juan Pollet       | 15 | ...     |
-|    |                  |    |                   |    |         |   ← fila vacía separadora
-| 16 | Yago Mosquera    | 16 | Lisandro Galliano | 16 | ...     |   ← acá empieza el problema
-| 17 | Ignacio Marino   | 17 | ...               | 17 | ...     |
-| ...repite TODOS los jugadores de los planteles siguientes...  |
+|    |                  |    |                   |    |         |   ← fila vacía
+| 16 | Yago Mosquera    | 16 | Lisandro Galliano | 16 | ...     |   ← duplicados
 ```
 
-**El patrón clave:** a partir de la fila 16 (después de la fila vacía), cada columna repite todos los jugadores de los planteles de menor categoría como suplentes potenciales. Son los mismos jugadores que ya aparecen en sus propias columnas — están duplicados.
+A partir de la fila 16, cada columna repite jugadores de planteles de menor categoría como suplentes potenciales. Son duplicados — no contarlos dos veces.
 
-Por ejemplo, en la columna de Primera, a partir de la fila 16 aparecen todos los jugadores de Intermedia, después todos los de Pre-A, Pre-B, etc. Un jugador como "Agustín Arone" aparece en la fila 10 de Pre-A, en la fila 25 de Intermedia y en la fila 35 de Primera — es la misma persona tres veces.
+### Proceso con el script (recomendado)
 
-**Paso a paso para limpiar la planilla:**
+El script `docs/convocados/procesar_CAR.py` automatiza el proceso:
 
-1. Para cada columna (Primera, Intermedia, Pre-A, Pre-B, Pre-C, Pre-D), quedarse **solo con las filas 1 a 15** — los titulares del plantel. Si hay suplentes reales del propio plantel aparecen en las filas 16, 17 (por ejemplo, si Primera tiene 2 suplentes propios son los puestos 16 y 17 de esa columna).
+1. Leer el `.xlsx` de Marcelo
+2. Extraer los titulares (filas 1–15 de cada plantel) y asignarles posición según el número de camiseta
+3. Identificar los suplentes-only (aparecen en fila 16+ pero no son titulares en ningún plantel)
+4. Matchear con los jugadores existentes en la DB
+5. Generar:
+   - `*_nuevos.sql` — jugadores nuevos a crear
+   - `*_posiciones.sql` — actualizar posición de jugadores existentes
+   - `*_convocados.csv` — archivo listo para importar
 
-2. Borrar todo lo que esté después de los suplentes reales del plantel. Si no hay suplentes, borrar desde la fila 16 en adelante en esa columna.
+Ejecutar en terminal:
+```bash
+python3 docs/convocados/procesar_CAR.py
+psql <DB_URL> < docs/convocados/CAR_nuevos.sql
+psql <DB_URL> < docs/convocados/CAR_posiciones.sql
+```
+Luego importar el CSV desde el botón **Importar convocados** en la pantalla de la fecha.
 
-3. Resultado final: una lista de entre 15 y 17 jugadores por plantel, sin duplicados.
+### Posición por número de camiseta
 
-4. Cruzar esa lista con el CSV exportado del Fantasy por nombre y apellido, y completar la columna `plantel` con el valor correspondiente (`PRIMERA`, `INTER`, `PRE_A`, etc.).
+| Camiseta | Posición |
+|----------|----------|
+| 1, 3 | Pilar |
+| 2 | Hooker |
+| 4, 5 | Segunda línea |
+| 6, 7, 8 | Tercera línea |
+| 9 | Medio scrum |
+| 10 | Apertura |
+| 11, 14 | Wing |
+| 12, 13 | Centro |
+| 15 | Fullback |
 
-> **Ojo con los suplentes:** un jugador de Intermedia que aparece como suplente de Primera (fila 16 de la columna Primera) es el mismo jugador que ya está en la fila 1 de la columna Intermedia. No contarlo dos veces — en el Fantasy va con el plantel de origen (`INTER`), no como Primera.
+### Revisar posiciones faltantes ("sin pos.")
+
+Después de importar, ir a la pantalla de la fecha → sección **Jugadores convocados**. Los jugadores sin posición específica tienen un badge rojo **"sin pos."**.
+
+Usar el botón **"sin pos. (N)"** para filtrar solo esos jugadores → click en **Editar** → asignar posición → Guardar.
+
+> Las posiciones quedan guardadas en el perfil del jugador y se usan en todas las fechas futuras. Solo hay que asignarlas una vez.
+
+### Proceso manual (sin script)
+
+1. Tocar **Exportar convocados** → descarga un CSV con todos los jugadores del sistema.
+2. Completar la columna `plantel` para cada jugador convocado:
+   - `PRIMERA`, `INTER`, `PRE_A`, `PRE_B`, `PRE_C`, `PRE_D`
+3. Tocar **Importar convocados** y subir el CSV.
+
+Solo van los jugadores convocados para esa fecha. Los que no estén en el archivo no aparecen disponibles para los usuarios.
+
+#### Ojo con los suplentes
+
+Un jugador de Intermedia que aparece en la columna de Primera (fila 16+) es el mismo jugador que ya está en la fila 1 de la columna Intermedia. En el Fantasy va con el plantel de origen (`INTER`), no como `PRIMERA`.
 
 ---
 
-### Puntajes
+## Puntajes
 
-1. Tocar **Exportar puntajes** → descarga un CSV con una fila por jugador convocado y columnas para cada estadística.
-2. Completar las columnas con los valores del partido:
+1. Tocar **Exportar puntajes** → descarga un CSV con una fila por jugador convocado.
+2. Completar las columnas:
    - `tries`, `tackles`, `knock_ons`, `penales`, `amarillas`, `rojas`
-   - `conversiones_metidas`, `conversiones_erradas` — patadas a los palos (conversiones)
-   - `penales_metidos`, `penales_errados` — patadas a los palos (penales)
+   - `conversiones_metidas`, `conversiones_erradas`
+   - `penales_metidos`, `penales_errados`
 3. Tocar **Importar puntajes** y subir el CSV.
-4. El sistema recalcula los puntajes automáticamente al importar.
-5. Una vez verificados, cambiar el estado a **PUNTUADA**.
+4. El sistema recalcula los puntajes automáticamente.
+5. Verificar en `/admin/estadísticas/[fechaId]`.
+6. Una vez verificados, cambiar estado a **PUNTUADA**.
 
 > Las columnas de patadas (`conversiones_*`, `penales_*`) solo afectan el puntaje de los equipos que designaron a ese jugador como **pateador**. Para el resto no cambia nada.
 
@@ -94,10 +138,10 @@ Por ejemplo, en la columna de Primera, a partir de la fila 16 aparecen todos los
 
 ## Gestión de jugadores
 
-Para incorporar un jugador nuevo al sistema:
+Para incorporar un jugador nuevo al sistema manualmente:
 
 1. Exportar la base actual de jugadores.
-2. Agregar la fila del jugador nuevo con sus datos.
+2. Agregar la fila con los datos del jugador nuevo.
 3. Importar el CSV actualizado.
 
 ---
@@ -113,17 +157,3 @@ Permite crear temporadas para usar el sistema año a año.
 ## Gestión de usuarios
 
 Desde acá se puede dar o sacar rol de admin a cualquier usuario registrado.
-
----
-
-## Flujo completo de una fecha
-
-```
-1. Crear fecha (si no existe)
-2. Exportar convocados → completar plantel → importar convocados
-3. Estado: PREVIA  →  usuarios arman su equipo
-4. Estado: CERRADA  →  arranca el partido
-5. Exportar puntajes → completar estadísticas → importar puntajes
-6. Verificar puntajes en /admin/estadísticas/[fechaId]
-7. Estado: PUNTUADA  →  se publican resultados y ranking
-```
