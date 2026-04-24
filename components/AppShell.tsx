@@ -67,7 +67,7 @@ export default function AppShell({ isAdmin, children }: Props) {
   return (
     <div className="min-h-screen flex">
       {/* Topbar */}
-      <div className="fixed top-0 left-0 right-0 z-30 border-b" style={{ background: 'linear-gradient(to right, #1a6b3a, #1a3a6b)', borderBottomColor: '#c8a951' }}>
+      <div className="fixed top-0 left-0 right-0 z-30 border-b" style={{ background: 'linear-gradient(to right, #1a6b3a, #1a3a6b)', borderBottomColor: '#c8a951', paddingTop: 'env(safe-area-inset-top)' }}>
         <div className="flex items-center justify-between px-3 py-2">
           <div className="w-9" />
           <div className="text-base font-semibold" style={{ color: '#c8a951' }}>Trico Fantasy</div>
