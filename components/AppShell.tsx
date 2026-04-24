@@ -81,7 +81,31 @@ export default function AppShell({ isAdmin, children }: Props) {
               👤
             </button>
             {userOpen && (
-              <div className="absolute right-0 mt-2 w-40 rounded shadow-lg text-sm z-50" style={{ background: '#1a3a6b', border: '1px solid #c8a951' }}>
+              <div className="absolute right-0 mt-2 w-48 rounded shadow-lg text-sm z-50" style={{ background: '#1a3a6b', border: '1px solid #c8a951' }}>
+                {isAdmin && (
+                  <>
+                    <div className="px-3 pt-2 pb-1 text-xs font-semibold uppercase tracking-wide" style={{ color: '#c8a951' }}>Admin</div>
+                    {[
+                      { href: '/admin/fechas', label: 'Fechas' },
+                      { href: '/admin/temporadas', label: 'Temporadas' },
+                      { href: '/admin/jugadores', label: 'Jugadores' },
+                      { href: '/admin/usuarios', label: 'Usuarios' },
+                    ].map(({ href, label }) => (
+                      <Link
+                        key={href}
+                        href={href}
+                        className="block px-3 py-2 text-white"
+                        style={{}}
+                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#1a6b3a'; }}
+                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}
+                        onClick={() => setUserOpen(false)}
+                      >
+                        {label}
+                      </Link>
+                    ))}
+                    <div style={{ borderTop: '1px solid rgba(200,169,81,0.3)', margin: '4px 0' }} />
+                  </>
+                )}
                 <button
                   className="w-full text-left px-3 py-2 text-white transition-colors"
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#1a6b3a'; }}
