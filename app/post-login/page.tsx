@@ -11,5 +11,5 @@ export default async function PostLogin() {
     redirect('/admin');
   }
 
-  redirect('/equipo');
+  redirect('/home');
 }
