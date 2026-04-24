@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import LogoutButton from "./LogoutButton";
 
 interface SidebarProps {
   isAdmin: boolean;
@@ -9,6 +8,7 @@ interface SidebarProps {
 }
 
 const userLinks = [
+  { href: "/home", label: "Inicio" },
   { href: "/equipo", label: "Mi equipo" },
   { href: "/ranking-fecha", label: "Ranking de la fecha" },
   { href: "/ranking-jugadores", label: "Ranking de jugadores" },
@@ -86,9 +86,6 @@ export default function Sidebar({ isAdmin, onNavigate }: SidebarProps) {
           </div>
         )}
       </nav>
-      <div className="p-4" style={{ borderTop: "1px solid #c8a951" }}>
-        <LogoutButton />
-      </div>
     </aside>
   );
 }
