@@ -86,6 +86,7 @@ export default function AppShell({ isAdmin, children }: Props) {
                   <>
                     <div className="px-3 pt-2 pb-1 text-xs font-semibold uppercase tracking-wide" style={{ color: '#c8a951' }}>Admin</div>
                     {[
+                      { href: '/admin', label: 'Panel admin' },
                       { href: '/admin/fechas', label: 'Fechas' },
                       { href: '/admin/temporadas', label: 'Temporadas' },
                       { href: '/admin/jugadores', label: 'Jugadores' },
