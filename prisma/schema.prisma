@@ -15,7 +15,20 @@ model Usuario {
   isAdmin      Boolean  @default(false) @map("is_admin")
   createdAt    DateTime @default(now()) @map("created_at")
 
-  equipos Equipo[]
+  equipos     Equipo[]
+  gameScores  GameScore[]
+}
+
+model GameScore {
+  id        Int      @id @default(autoincrement())
+  usuarioId Int      @map("usuario_id")
+  score     Int
+  tries     Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+
+  @@index([score(sort: Desc)])
 }
 
 model Temporada {

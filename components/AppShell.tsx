@@ -42,11 +42,20 @@ const IconTemporada = () => (
   </svg>
 );
 
+const IconJuego = () => (
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <ellipse cx="12" cy="12" rx="8" ry="5" transform="rotate(-30 12 12)"/>
+    <line x1="4.5" y1="9" x2="19.5" y2="15"/>
+    <line x1="12" y1="4.5" x2="12" y2="19.5"/>
+  </svg>
+);
+
 const tabLinks = [
   { href: '/home',          label: 'Inicio',    Icon: IconHome },
   { href: '/equipo',        label: 'Mi equipo', Icon: IconEquipo },
   { href: '/ranking-fecha', label: 'Rankings',  Icon: IconRanking },
   { href: '/tabla-general', label: 'Temporada', Icon: IconTemporada },
+  { href: '/juego',         label: 'Runner',     Icon: IconJuego },
 ];
 
 export default function AppShell({ isAdmin, children }: Props) {

@@ -13,6 +13,7 @@ const userLinks = [
   { href: "/ranking-fecha", label: "Ranking de la fecha" },
   { href: "/ranking-jugadores", label: "Ranking de jugadores" },
   { href: "/tabla-general", label: "Ranking de temporada" },
+  { href: "/juego", label: "🏉 Corre Nete" },
   { href: "/como-jugar", label: "¿Cómo jugar?" },
 ];
 

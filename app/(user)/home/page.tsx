@@ -38,7 +38,7 @@ export default async function HomePage() {
     );
   }
 
-  const [ultimaFecha, proximaFecha] = await Promise.all([
+  const [ultimaFecha, proximaFecha, gameTopRaw] = await Promise.all([
     prisma.fecha.findFirst({
       where: { temporadaId: temporada.id, estado: "PUNTUADA" },
       orderBy: { nro: "desc" },
@@ -47,7 +47,22 @@ export default async function HomePage() {
       where: { temporadaId: temporada.id, estado: "PREVIA" },
       orderBy: { nro: "asc" },
     }),
+    prisma.gameScore.groupBy({
+      by: ["usuarioId"],
+      _max: { score: true, tries: true },
+      orderBy: { _max: { score: "desc" } },
+      take: 3,
+    }),
   ]);
+
+  const gameUsers = gameTopRaw.length
+    ? await prisma.usuario.findMany({
+        where: { id: { in: gameTopRaw.map((r) => r.usuarioId) } },
+        select: { id: true, nombre: true },
+      })
+    : [];
+  const gameUserMap = new Map(gameUsers.map((u) => [u.id, u.nombre]));
+  const gameMedals = ["🥇", "🥈", "🥉"];
 
   let jugadorFechas: Awaited<ReturnType<typeof prisma.jugadorFecha.findMany<{ include: { jugador: true } }>>> = [];
   let equipoFechas: Awaited<ReturnType<typeof prisma.equipoFecha.findMany<{ include: { equipo: { include: { usuario: true } } } }>>> = [];
@@ -372,6 +387,45 @@ export default async function HomePage() {
           </Link>
         </section>
       )}
+
+      {/* Mini-juego */}
+      <section style={cardStyle}>
+        <div className="flex items-center justify-between" style={{ marginBottom: "0.75rem" }}>
+          <p style={labelStyle}>Corre Nete 🏉</p>
+          <Link
+            href="/juego"
+            className="text-xs px-3 py-1 rounded"
+            style={{ background: "#c8a951", color: "#0a1a36", fontWeight: 700, fontFamily: "monospace" }}
+          >
+            ▶ Jugar
+          </Link>
+        </div>
+        {gameTopRaw.length === 0 ? (
+          <p style={{ color: "rgba(245,240,224,0.4)", fontSize: "0.78rem" }}>
+            Nadie jugó todavía. Sé el primero 👆
+          </p>
+        ) : (
+          <div className="space-y-1.5">
+            {gameTopRaw.map((r, idx) => (
+              <div
+                key={r.usuarioId}
+                className="flex items-center justify-between rounded px-3 py-1.5 text-sm"
+                style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(200,169,81,0.2)" }}
+              >
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize: "1rem" }}>{gameMedals[idx]}</span>
+                  <p style={{ color: "#f5f0e0", fontSize: "0.82rem" }}>
+                    {gameUserMap.get(r.usuarioId) ?? "?"}
+                  </p>
+                </div>
+                <span style={{ color: "#c8a951", fontWeight: 700, fontSize: "0.82rem", fontFamily: "monospace" }}>
+                  {r._max.score ?? 0} pts
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       {/* ¿Cómo jugar? */}
       <Link
