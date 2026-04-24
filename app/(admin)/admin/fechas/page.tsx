@@ -2,6 +2,7 @@ import { prisma } from '@/lib/prisma';
 import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import CreateFechaForm from '@/components/CreateFechaForm';
+import FechaInstructivoModal from '@/components/FechaInstructivoModal';
 import { getTemporadaActiva } from '@/lib/temporada';
 
 export default async function AdminFechasPage() {
@@ -20,7 +21,10 @@ export default async function AdminFechasPage() {
       <h1 className="text-2xl font-semibold text-[#c8a951]">Fechas</h1>
 
       <section className="space-y-2">
-        <h2 className="text-lg font-semibold text-[#c8a951]">Crear fecha</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="text-lg font-semibold text-[#c8a951]">Crear fecha</h2>
+          <FechaInstructivoModal />
+        </div>
         <CreateFechaForm />
       </section>
 

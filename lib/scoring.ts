@@ -50,7 +50,19 @@ export async function recalculateFechaScores(fechaId: number) {
       }
     }
 
-    const total = totalSinCapitan + (capitanScore || 0); // duplica sumando una vez extra
+    let pateadorKickingScore = 0;
+    if (ef.pateadorJugadorId) {
+      const pat = rosterScores.find((jf) => jf.jugadorId === ef.pateadorJugadorId);
+      if (pat) {
+        pateadorKickingScore =
+          pat.conversionesMetidas * 1 -
+          pat.conversionesErradas * 1 +
+          pat.penalesMetidos * 2 -
+          pat.penalesErrados * 2;
+      }
+    }
+
+    const total = totalSinCapitan + (capitanScore || 0) + pateadorKickingScore;
 
     await prisma.equipoFecha.update({
       where: { id: ef.id },

@@ -40,9 +40,20 @@ export const POST = async (req: Request) => {
       continue;
     }
     const data: any = {};
-    const numericFields = ['tries', 'tackles', 'knock_ons', 'penales', 'amarillas', 'rojas'];
-    numericFields.forEach((f) => {
-      if (row[f] !== undefined) data[f === 'knock_ons' ? 'knockOns' : f] = Number(row[f] ?? 0);
+    const fieldMap: Record<string, string> = {
+      tries: 'tries',
+      tackles: 'tackles',
+      knock_ons: 'knockOns',
+      penales: 'penales',
+      amarillas: 'amarillas',
+      rojas: 'rojas',
+      conversiones_metidas: 'conversionesMetidas',
+      conversiones_erradas: 'conversionesErradas',
+      penales_metidos: 'penalesMetidos',
+      penales_errados: 'penalesErrados',
+    };
+    Object.entries(fieldMap).forEach(([csv, prisma]) => {
+      if (row[csv] !== undefined) data[prisma] = Number(row[csv] ?? 0);
     });
     try {
       await prisma.jugadorFecha.update({

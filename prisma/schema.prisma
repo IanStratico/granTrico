@@ -71,9 +71,13 @@ model JugadorFecha {
   penales          Int      @default(0)
   amarillas        Int      @default(0)
   rojas            Int      @default(0)
-  puntajeCalculado Int      @default(0) @map("puntaje_calculado")
-  puntajeOverride  Int?     @map("puntaje_override")
-  updatedAt        DateTime @updatedAt @map("updated_at")
+  conversionesMetidas Int      @default(0) @map("conversiones_metidas")
+  conversionesErradas Int      @default(0) @map("conversiones_erradas")
+  penalesMetidos      Int      @default(0) @map("penales_metidos")
+  penalesErrados      Int      @default(0) @map("penales_errados")
+  puntajeCalculado    Int      @default(0) @map("puntaje_calculado")
+  puntajeOverride     Int?     @map("puntaje_override")
+  updatedAt           DateTime @updatedAt @map("updated_at")
 
   jugador Jugador @relation(fields: [jugadorId], references: [id])
   fecha   Fecha   @relation(fields: [fechaId], references: [id])
@@ -99,9 +103,10 @@ model EquipoFecha {
   id               Int      @id @default(autoincrement())
   equipoId         Int      @map("equipo_id")
   fechaId          Int      @map("fecha_id")
-  puntajeTotal     Int      @default(0) @map("puntaje_total")
-  capitanJugadorId Int?     @map("capitan_jugador_id")
-  createdAt        DateTime @default(now()) @map("created_at")
+  puntajeTotal      Int      @default(0) @map("puntaje_total")
+  capitanJugadorId  Int?     @map("capitan_jugador_id")
+  pateadorJugadorId Int?     @map("pateador_jugador_id")
+  createdAt         DateTime @default(now()) @map("created_at")
 
   equipo    Equipo               @relation(fields: [equipoId], references: [id])
   fecha     Fecha                @relation(fields: [fechaId], references: [id])
@@ -114,6 +119,7 @@ model EquipoFechaJugador {
   id            Int @id @default(autoincrement())
   equipoFechaId Int @map("equipo_fecha_id")
   jugadorId     Int @map("jugador_id")
+  slot          Int @default(0)
 
   equipoFecha EquipoFecha @relation(fields: [equipoFechaId], references: [id])
   jugador     Jugador     @relation(fields: [jugadorId], references: [id])
@@ -124,6 +130,15 @@ model EquipoFechaJugador {
 enum Posicion {
   FORWARD
   BACK
+  PILAR
+  HOOKER
+  SEGUNDA_LINEA
+  TERCERA_LINEA
+  MEDIO_SCRUM
+  APERTURA
+  CENTRO
+  WING
+  FULLBACK
 }
 
 enum Plantel {

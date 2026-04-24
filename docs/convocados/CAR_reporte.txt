@@ -1,0 +1,129 @@
+=== REPORTE DE MATCHING CAR ===
+
+--- MATCHES (95) ---
+  [PRIMERA] Roman Osella -> id=147 (apellido) [ACTUALIZA POSICION]
+  [INTER] Yago Mosquera -> id=162 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRE_A] Lisandro Galliano -> id=177 (apellido) [ACTUALIZA POSICION]
+  [PRE_B] Franco Gasco -> id=195 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Nicolas Pettigrew -> id=213 (apellido) [ACTUALIZA POSICION]
+  [PRE_D] Mateo Masuero -> id=212 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Franco Cammaratta -> id=148 (apellido) [ACTUALIZA POSICION]
+  [INTER] Ignacio Marino -> id=163 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Santiago Rodriguez Bargiela -> id=178 (manual) [ACTUALIZA POSICION]
+  [PRE_B] Mateo Lepiscopo -> id=194 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Marcos Stanic -> id=261 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Federico Alvarez -> id=253 (apellido) [ACTUALIZA POSICION]
+  [INTER] Jesuan Mosquera -> id=164 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRE_A] Juan Ignacio Ghizzoli -> id=196 (manual) [ACTUALIZA POSICION]
+  [PRE_B] Tomas Bollini -> id=257 (apellido) [ACTUALIZA POSICION]
+  [PRE_D] Marcos Bogo -> id=230 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Tomas Alonso -> id=254 (apellido) [ACTUALIZA POSICION]
+  [INTER] Diego Lorenzo -> id=150 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Ignacio Rodriguez Ricci -> id=165 (manual) [ACTUALIZA POSICION]
+  [PRE_B] Mirko sack -> id=199 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Santiago Lamas -> id=237 (apellido) [ACTUALIZA POSICION]
+  [PRE_D] Luciano Polenta -> id=232 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRIMERA] Gianluca Gianoli -> id=151 (manual) [ACTUALIZA POSICION]
+  [INTER] Gonzalo Guillani -> id=166 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Dibacco -> id=215 (manual) [ACTUALIZA POSICION]
+  [PRE_B] Juan Ignacio Speroni -> id=198 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRE_D] Franco Cossa -> id=233 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Tomas Aguirre -> id=152 (apellido) [ACTUALIZA POSICION]
+  [INTER] Gonzalo Laiño -> id=183 (manual) [ACTUALIZA POSICION]
+  [PRE_A] Rodrigo Berdomas -> id=168 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRE_B] Juan Ignacio Rodriguez -> id=184 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRE_C] Agustin Pallares -> id=252 (apellido) [ACTUALIZA POSICION]
+  [PRE_D] Gaston Sonneville -> id=214 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Lucca Santero -> id=167 (apellido) [ACTUALIZA POSICION]
+  [INTER] Ivan Magister -> id=201 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Patricio Vidal -> id=182 (apellido) [ACTUALIZA POSICION]
+  [PRE_B] Bruno Massimi -> id=236 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Joaquin Polenta -> id=234 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRE_D] Ignacio Ramos -> id=251 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Mateo Gonzalez ( C) -> id=154 (apellido) [ACTUALIZA POSICION]
+  [INTER] Tomas Tarula -> id=200 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Agustin Dalto -> id=169 (apellido) [ACTUALIZA POSICION]
+  [PRE_B] Ignacio Lisica -> id=260 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Gonzalo Siragusa -> id=218 (manual) [ACTUALIZA POSICION]
+  [PRIMERA] Bruno Zurniewicz -> id=155 (apellido) [ACTUALIZA POSICION]
+  [INTER] Franco Sgroi -> id=170 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Juan Ignacio Maschietto -> id=185 (apellido) [ACTUALIZA POSICION]
+  [PRE_B] Axel rud -> id=202 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Nicolas Nadal -> id=238 (apellido) [ACTUALIZA POSICION]
+  [PRE_D] Serafin Perez -> id=219 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Santiago Speroni -> id=171 (apellido+nombre) [ACTUALIZA POSICION]
+  [INTER] Federico Ban -> id=186 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Agustin Arone -> id=255 (apellido) [ACTUALIZA POSICION]
+  [PRE_B] Pedro Weiz -> id=203 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRE_C] Jose Weiz -> id=220 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRE_D] Di Pascuale Juan Manuel -> id=239 (apellido_compuesto) [ACTUALIZA POSICION]
+  [PRIMERA] Juan Cruz Procopick -> id=157 (apellido) [ACTUALIZA POSICION]
+  [INTER] Juan Bugge -> id=172 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Santino Oyero -> id=193 (apellido) [ACTUALIZA POSICION]
+  [PRE_B] Ignacio Fernandez -> id=204 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Santino Curatiola -> id=229 (apellido) [ACTUALIZA POSICION]
+  [PRE_D] Santiago Muzzupapa -> id=244 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Ian Verva -> id=158 (apellido) [ACTUALIZA POSICION]
+  [INTER] Marco Gianoli -> id=188 (manual) [ACTUALIZA POSICION]
+  [PRE_A] Juan Cruz Ratti -> id=205 (apellido) [ACTUALIZA POSICION]
+  [PRE_B] Hipolito Boga -> id=222 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Bautista Corrales -> id=241 (apellido) [ACTUALIZA POSICION]
+  [PRE_D] Thiago Miñio -> id=248 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Tomas Lemes -> id=174 (apellido) [ACTUALIZA POSICION]
+  [INTER] Lautaro Lopez Badia -> id=192 (manual) [ACTUALIZA POSICION]
+  [PRE_A] Olvier Ortiz -> id=189 (apellido+nombre) [ACTUALIZA POSICION]
+  [PRE_B] Fausto Pelossi -> id=223 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Nicolas Villalba -> id=247 (apellido) [ACTUALIZA POSICION]
+  [PRE_D] Velentin campos Cafiero -> id=249 (manual) [ACTUALIZA POSICION]
+  [PRIMERA] Thiago Panes -> id=160 (apellido) [ACTUALIZA POSICION]
+  [INTER] Bernardo Novak -> id=187 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Matias Vilarriño -> id=190 (apellido) [ACTUALIZA POSICION]
+  [PRE_B] Ramiro Berdeski -> id=256 (manual) [ACTUALIZA POSICION]
+  [PRE_C] Ivan Panzitta Forastiero -> id=224 (manual) [ACTUALIZA POSICION]
+  [PRE_D] Julian Chan -> id=258 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Juan Pollet -> id=176 (apellido) [ACTUALIZA POSICION]
+  [INTER] Juan Almandoz -> id=161 (apellido) [ACTUALIZA POSICION]
+  [PRE_A] Jeronimo Travin -> id=208 (apellido) [ACTUALIZA POSICION]
+  [PRE_B] Ezequiel Yanibelli -> id=209 (apellido) [ACTUALIZA POSICION]
+  [PRE_C] Matias Minski -> id=225 (apellido) [ACTUALIZA POSICION]
+  [PRIMERA] Julian Papa -> id=149 (apellido_sup)
+  [PRE_A] Tomas Franchini -> id=206 (apellido_sup)
+  [PRE_C] Valentino Hector Martinez -> id=240 (apellido_sup)
+  [PRIMERA] Santiago Berdomas -> id=159 (apellido+nombre_sup)
+  [PRE_B] Ignacio Zavala -> id=262 (apellido_sup)
+  [PRE_B] Calogero Cassieri -> id=250 (apellido_sup)
+  [PRE_D] Justo Pablo Marsicano -> id=211 (apellido_sup)
+  [PRE_D] Maximiliano Chebli -> id=246 (apellido_sup)
+  [PRE_D] Alejo Santiago Martin -> id=228 (apellido_sup)
+  [PRE_D] Gianluca Correnti -> id=235 (apellido_sup)
+
+--- JUGADORES NUEVOS (11) ---
+  [PRE_D] Ignacio Echeverria -> HOOKER (tipo=titular)
+  [PRE_C] Felipe Godoy -> PILAR (tipo=titular)
+  [PRE_C] Lautaro Cabrera Roldan -> SEGUNDA_LINEA (tipo=titular)
+  [PRE_D] Martin Olguin -> TERCERA_LINEA (tipo=titular)
+  [PRE_D] Franco DG -> FULLBACK (tipo=titular)
+  [PRE_B] Matias Santos Julia -> FORWARD (tipo=suplente_only)
+  [PRE_D] Bautista Gonzales -> FORWARD (tipo=suplente_only)
+  [PRE_D] Manel Ceijas -> FORWARD (tipo=suplente_only)
+  [PRE_D] Juan Manuel filippi -> FORWARD (tipo=suplente_only)
+  [PRE_D] Matias La Banca -> FORWARD (tipo=suplente_only)
+  [PRE_D] Tomas Lopez -> FORWARD (tipo=suplente_only)
+
+--- SUPLENTES-ONLY (16) ---
+  [PRIMERA] Julian Papa -> match id=149 (apellido)
+  [PRE_A] Tomas Franchini -> match id=206 (apellido)
+  [PRE_B] Matias Santos Julia -> NUEVO
+  [PRE_C] Valentino Hector Martinez -> match id=240 (apellido)
+  [PRE_D] Bautista Gonzales -> NUEVO
+  [PRIMERA] Santiago Berdomas -> match id=159 (apellido+nombre)
+  [PRE_B] Ignacio Zavala -> match id=262 (apellido)
+  [PRE_D] Manel Ceijas -> NUEVO
+  [PRE_B] Calogero Cassieri -> match id=250 (apellido)
+  [PRE_D] Justo Pablo Marsicano -> match id=211 (apellido)
+  [PRE_D] Juan Manuel filippi -> NUEVO
+  [PRE_D] Maximiliano Chebli -> match id=246 (apellido)
+  [PRE_D] Alejo Santiago Martin -> match id=228 (apellido)
+  [PRE_D] Gianluca Correnti -> match id=235 (apellido)
+  [PRE_D] Matias La Banca -> NUEVO
+  [PRE_D] Tomas Lopez -> NUEVO

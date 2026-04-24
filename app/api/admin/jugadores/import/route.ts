@@ -42,7 +42,7 @@ export const POST = async (req: Request) => {
     nombre = nombre?.toString().trim();
     apellido = apellido?.toString().trim();
     apodo = apodo ? apodo.toString().trim() : null;
-    posicion = posicion?.toString().trim() as 'FORWARD' | 'BACK' | undefined;
+    posicion = posicion?.toString().trim().toUpperCase() as string | undefined;
     const camadaNum = camada !== undefined && camada !== null && camada !== '' ? Number(camada) : null;
 
     if (!nombre || !apellido || !camadaNum || !posicion) {

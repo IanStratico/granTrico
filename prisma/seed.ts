@@ -1,4 +1,4 @@
-import { PrismaClient, Posicion, Plantel, EstadoFecha } from '@prisma/client';
+import { PrismaClient, Plantel, EstadoFecha } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -50,13 +50,25 @@ async function main() {
     ]
   });
 
+  const posiciones = [
+    'PILAR', 'PILAR', 'PILAR',
+    'HOOKER', 'HOOKER',
+    'SEGUNDA_LINEA', 'SEGUNDA_LINEA',
+    'TERCERA_LINEA', 'TERCERA_LINEA', 'TERCERA_LINEA',
+    'MEDIO_SCRUM', 'MEDIO_SCRUM',
+    'APERTURA', 'APERTURA',
+    'CENTRO', 'CENTRO',
+    'WING', 'WING',
+    'FULLBACK', 'FULLBACK',
+  ] as const;
+
   const jugadores = await prisma.jugador.createMany({
-    data: Array.from({ length: 20 }).map((_, i) => ({
+    data: posiciones.map((posicion, i) => ({
       nombre: `Jugador${i + 1}`,
       apellido: `Apellido${i + 1}`,
       apodo: `J${i + 1}`,
       camada: 2010 + (i % 10),
-      posicion: i < 10 ? Posicion.FORWARD : Posicion.BACK,
+      posicion,
       activo: true
     }))
   });

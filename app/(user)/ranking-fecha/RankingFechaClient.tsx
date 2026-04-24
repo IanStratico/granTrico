@@ -13,10 +13,12 @@ export interface RankingTeamVM {
   usuarioNombre: string;
   puntajeTotal: number;
   capitanId: number | null;
+  pateadorId: number | null;
   jugadores: {
     jugadorId: number;
+    slot: number;
     nombre: string;
-    posicion: "FORWARD" | "BACK";
+    posicion: string;
     score: number | null;
     apodo?: string | null;
     plantel?: string | null;
@@ -49,7 +51,7 @@ export default function RankingFechaClient({
   const [modalTeam, setModalTeam] = useState<RankingTeamVM | null>(null);
 
   const lastPlaceId =
-    estado === "PUNTUADA" && teams.length > 0
+    estado === "PUNTUADA" && teams.length > 3
       ? teams[teams.length - 1].equipoFechaId
       : null;
 
@@ -72,6 +74,7 @@ export default function RankingFechaClient({
           prevHref={prevId ? `/ranking-fecha/${prevId}` : null}
           nextHref={nextId ? `/ranking-fecha/${nextId}` : null}
           label={title}
+          estado={estado}
         />
         <div className="text-xl font-semibold" style={{ color: "#c8a951" }}>
           Ranking de la fecha
@@ -102,13 +105,12 @@ export default function RankingFechaClient({
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{["🥇", "🥈", "🥉"][idx]}</span>
-                <div className="space-y-1">
-                  <p
-                    className="text-sm font-semibold"
-                    style={{ color: "#f5f0e0" }}
-                  >
-                    {team.equipoFechaId === lastPlaceId ? " 💩" : ""}
-                    {team.equipoNombre}
+                <div>
+                  <p className="text-sm font-semibold" style={{ color: "#f5f0e0" }}>
+                    {team.equipoFechaId === lastPlaceId ? "💩 " : ""}{team.equipoNombre}
+                  </p>
+                  <p className="text-xs" style={{ color: "rgba(245,240,224,0.6)" }}>
+                    {team.usuarioNombre}
                   </p>
                 </div>
               </div>
@@ -132,16 +134,17 @@ export default function RankingFechaClient({
               }}
             >
               <div className="flex items-center gap-2">
-                <span
-                  className="w-6 text-right font-semibold"
-                  style={{ color: "#c8a951" }}
-                >
+                <span className="w-6 text-right font-semibold" style={{ color: "#c8a951" }}>
                   {idx + 4}.
                 </span>
-                <span className="font-medium">
-                  {team.equipoFechaId === lastPlaceId ? " 💩" : ""}
-                  {team.equipoNombre}
-                </span>
+                <div>
+                  <p className="font-medium">
+                    {team.equipoFechaId === lastPlaceId ? "💩 " : ""}{team.equipoNombre}
+                  </p>
+                  <p className="text-xs" style={{ color: "rgba(245,240,224,0.6)" }}>
+                    {team.usuarioNombre}
+                  </p>
+                </div>
               </div>
               <span className="font-semibold" style={{ color: "#c8a951" }}>
                 {team.puntajeTotal} pts
@@ -193,28 +196,31 @@ export default function RankingFechaClient({
 
             <FieldView
               readonly
-              slots={formationOrder.map((slot, idx) => {
-                const p = modalTeam.jugadores[idx];
-                return {
-                  slot,
-                  player: p
-                    ? {
-                        id: p.jugadorId,
-                        name: p.apodo ?? p.nombre,
-                        posicion: p.posicion,
-                        isCapitan: modalTeam.capitanId === p.jugadorId,
-                        score:
-                          typeof p.score === "number"
-                            ? p.score *
-                              (modalTeam.capitanId === p.jugadorId ? 2 : 1)
-                            : null,
-                        apodo: p.apodo ?? undefined,
-                        plantel: p.plantel ?? undefined,
-                        camada: p.camada ?? undefined,
-                      }
-                    : null,
-                };
-              })}
+              slots={(() => {
+                const bySlot = Object.fromEntries(modalTeam.jugadores.map(j => [j.slot, j]));
+                return formationOrder.map((slot) => {
+                  const p = bySlot[slot];
+                  return {
+                    slot,
+                    player: p
+                      ? {
+                          id: p.jugadorId,
+                          name: p.apodo ?? p.nombre,
+                          posicion: p.posicion,
+                          isCapitan: modalTeam.capitanId === p.jugadorId,
+                          isPateador: modalTeam.pateadorId === p.jugadorId,
+                          score:
+                            typeof p.score === "number"
+                              ? p.score * (modalTeam.capitanId === p.jugadorId ? 2 : 1)
+                              : null,
+                          apodo: p.apodo ?? undefined,
+                          plantel: p.plantel ?? undefined,
+                          camada: p.camada ?? undefined,
+                        }
+                      : null,
+                  };
+                });
+              })()}
               onSelectSlot={() => {}}
               onSetCapitan={() => {}}
             />

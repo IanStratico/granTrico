@@ -15,6 +15,7 @@ interface Props {
   convocados: ConvocadoVM[];
   initialSelected: number[];
   initialCapitan: number | null;
+  initialPateador: number | null;
   isAdmin: boolean;
   userEmail: string;
   userRole: "admin" | "user";
@@ -32,6 +33,7 @@ export default function EquipoClient({
   convocados,
   initialSelected,
   initialCapitan,
+  initialPateador,
   isAdmin,
   userEmail,
   userRole,
@@ -42,6 +44,7 @@ export default function EquipoClient({
         prevHref={prevId ? `/equipo?fecha=${prevId}` : null}
         nextHref={nextId ? `/equipo?fecha=${nextId}` : null}
         label={`Fecha ${fechaNro} - ${fechaRival}`}
+        estado={fechaEstado}
       />
       <div className="text-xl font-semibold" style={{ color: "#c8a951" }}>
         Mi equipo
@@ -54,6 +57,7 @@ export default function EquipoClient({
         convocados={convocados}
         initialSelected={initialSelected}
         initialCapitanId={initialCapitan}
+        initialPateadorId={initialPateador}
       />
     </div>
   );

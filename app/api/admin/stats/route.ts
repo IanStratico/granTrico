@@ -20,6 +20,10 @@ export async function POST(request: Request) {
       penales: number;
       amarillas: number;
       rojas: number;
+      conversionesMetidas: number;
+      conversionesErradas: number;
+      penalesMetidos: number;
+      penalesErrados: number;
       puntajeOverride: number | null;
     }>;
   };
@@ -38,6 +42,10 @@ export async function POST(request: Request) {
         penales: row.penales,
         amarillas: row.amarillas,
         rojas: row.rojas,
+        conversionesMetidas: row.conversionesMetidas,
+        conversionesErradas: row.conversionesErradas,
+        penalesMetidos: row.penalesMetidos,
+        penalesErrados: row.penalesErrados,
         puntajeOverride: row.puntajeOverride
       }
     });

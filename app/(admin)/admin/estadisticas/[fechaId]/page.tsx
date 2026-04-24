@@ -30,6 +30,10 @@ export default async function AdminEstadisticasPage({ params }: Props) {
     penales: c.penales,
     amarillas: c.amarillas,
     rojas: c.rojas,
+    conversionesMetidas: c.conversionesMetidas,
+    conversionesErradas: c.conversionesErradas,
+    penalesMetidos: c.penalesMetidos,
+    penalesErrados: c.penalesErrados,
     puntajeOverride: c.puntajeOverride
   }));
 

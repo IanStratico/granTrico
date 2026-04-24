@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { Plantel, Posicion } from "@prisma/client";
 import FieldView from "./FieldView";
 import PlayerSelectModal from "./PlayerSelectModal";
+import { FORMATION_ORDER, SLOT_POSITION_MAP, FORWARD_POSITIONS, labelPosicion } from "@/lib/constants";
 
 export interface ConvocadoVM {
   jugadorId: number;
@@ -23,6 +24,7 @@ interface Props {
   convocados: ConvocadoVM[];
   initialSelected: number[];
   initialCapitanId: number | null;
+  initialPateadorId: number | null;
 }
 
 export default function TeamBuilder({
@@ -33,8 +35,9 @@ export default function TeamBuilder({
   convocados,
   initialSelected,
   initialCapitanId,
+  initialPateadorId,
 }: Props) {
-  const formationOrder = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10, 12, 13, 11, 15, 14];
+  const formationOrder = FORMATION_ORDER;
   const initAssignments = () => {
     const arr: (number | null)[] = Array(formationOrder.length).fill(null);
     initialSelected.forEach((id, idx) => {
@@ -46,6 +49,7 @@ export default function TeamBuilder({
   const [assignments, setAssignments] =
     useState<(number | null)[]>(initAssignments);
   const [capitan, setCapitan] = useState<number | null>(initialCapitanId);
+  const [pateador, setPateador] = useState<number | null>(initialPateadorId);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -63,13 +67,11 @@ export default function TeamBuilder({
   );
 
   const counts = useMemo(() => {
-    const forwards = selected.filter(
-      (id) =>
-        convocados.find((c) => c.jugadorId === id)?.posicion === "FORWARD",
-    ).length;
-    const backs = selected.filter(
-      (id) => convocados.find((c) => c.jugadorId === id)?.posicion === "BACK",
-    ).length;
+    const forwards = selected.filter((id) => {
+      const pos = convocados.find((c) => c.jugadorId === id)?.posicion;
+      return pos ? FORWARD_POSITIONS.includes(pos) : false;
+    }).length;
+    const backs = selected.length - forwards;
     const porPlantel: Record<string, number> = {};
     for (const id of selected) {
       const c = convocados.find((v) => v.jugadorId === id);
@@ -78,6 +80,23 @@ export default function TeamBuilder({
     }
     return { total: selected.length, forwards, backs, porPlantel };
   }, [selected, convocados]);
+
+  const currentSlotPlayer = useMemo(() => {
+    if (activeSlot === null) return null;
+    const idx = formationOrder.indexOf(activeSlot);
+    const pId = idx >= 0 ? assignments[idx] : null;
+    return pId ? convocados.find((c) => c.jugadorId === pId) ?? null : null;
+  }, [activeSlot, assignments, convocados, formationOrder]);
+
+  const fullPlanteles = useMemo(() => {
+    const adjusted = { ...counts.porPlantel };
+    if (currentSlotPlayer) {
+      adjusted[currentSlotPlayer.plantel] = (adjusted[currentSlotPlayer.plantel] || 0) - 1;
+    }
+    return Object.entries(adjusted)
+      .filter(([, n]) => n >= 4)
+      .map(([plantel]) => plantel);
+  }, [counts.porPlantel, currentSlotPlayer]);
 
   const openSlot = (slot: number) => {
     setShowDetailModal(false);
@@ -108,6 +127,9 @@ export default function TeamBuilder({
       if (capitan && !next.includes(capitan)) {
         setCapitan(null);
       }
+      if (pateador && !next.includes(pateador)) {
+        setPateador(null);
+      }
       return next;
     });
   };
@@ -128,13 +150,23 @@ export default function TeamBuilder({
       setLoading(false);
       return;
     }
+    if (!pateador) {
+      setError("Debes elegir un pateador");
+      setLoading(false);
+      return;
+    }
     const res = await fetch("/api/user/team", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         fechaId,
-        jugadorIds: selected,
+        asignaciones: formationOrder
+          .map((slot: number, idx: number) =>
+            assignments[idx] !== null ? { slot, jugadorId: assignments[idx] } : null,
+          )
+          .filter(Boolean),
         capitanId: capitan,
+        pateadorId: pateador,
       }),
     });
     const data = await res.json();
@@ -162,6 +194,7 @@ export default function TeamBuilder({
             name: `${p.apellido}, ${p.nombre}`,
             posicion: p.posicion,
             isCapitan: capitan === p.jugadorId,
+            isPateador: pateador === p.jugadorId,
             score: displayScore,
             apodo: p.apodo ?? undefined,
             plantel: p.plantel,
@@ -174,7 +207,7 @@ export default function TeamBuilder({
   const takenIds = assignments.filter((v): v is number => v !== null);
 
   const slotLabel = activeSlot
-    ? `#${activeSlot} ${convocados.find((c) => c.jugadorId === activeSlotPlayerId())?.posicion ?? ""}`
+    ? `#${activeSlot} — ${labelPosicion[SLOT_POSITION_MAP[activeSlot]] ?? ""}`
     : "";
 
   return (
@@ -270,6 +303,7 @@ export default function TeamBuilder({
           <li>Máx 8 forwards, 7 backs</li>
           <li>Máx 4 por plantel</li>
           <li>1 capitán obligatorio</li>
+          <li>1 pateador obligatorio</li>
         </ul>
       </details>
       {/* Modal selección */}
@@ -288,6 +322,7 @@ export default function TeamBuilder({
           }
         }}
         slotLabel={slotLabel}
+        expectedPosition={activeSlot ? SLOT_POSITION_MAP[activeSlot] : undefined}
         jugadores={convocados.map((c) => ({
           ...c,
           nombre: `${c.apellido}, ${c.nombre} - ${c.apodo}`,
@@ -295,6 +330,7 @@ export default function TeamBuilder({
         }))}
         takenIds={takenIds}
         currentId={activeSlotPlayerId()}
+        fullPlanteles={fullPlanteles}
       />
 
       {showDetailModal && selectedPlayer && (
@@ -309,14 +345,15 @@ export default function TeamBuilder({
           >
             <div className="flex items-center gap-3">
               <div
-                className="w-16 h-16 rounded-full flex items-center justify-center"
-                style={{ background: "rgba(245,240,224,0.1)" }}
+                className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ background: "#fff", border: "2px solid #c8a951" }}
               >
-                <span
-                  className="text-xs"
-                  style={{ color: "rgba(245,240,224,0.5)" }}
-                >
-                  Foto
+                <span className="text-base font-bold" style={{ color: "#1a3a6b" }}>
+                  {(selectedPlayer.apodo || selectedPlayer.apellido || "")
+                    .split(" ")
+                    .slice(0, 2)
+                    .map((w: string) => w[0]?.toUpperCase() ?? "")
+                    .join("")}
                 </span>
               </div>
               <div className="flex-1 space-y-1">
@@ -337,7 +374,7 @@ export default function TeamBuilder({
                   style={{ color: "rgba(245,240,224,0.7)" }}
                 >
                   {selectedPlayer.plantel} ·{" "}
-                  {selectedPlayer.posicion === "FORWARD" ? "FW" : "BK"}
+                  {FORWARD_POSITIONS.includes(selectedPlayer.posicion) ? "FW" : "BK"}
                 </div>
                 {selectedPlayer.camada && (
                   <div
@@ -386,6 +423,26 @@ export default function TeamBuilder({
                       Hacer capitán
                     </button>
                   )}
+                  {selectedPlayer.jugadorId === pateador ? (
+                    <p
+                      className="text-xs text-center"
+                      style={{ color: "#c8a951" }}
+                    >
+                      Es el pateador actual 🥾
+                    </p>
+                  ) : (
+                    <button
+                      className="w-full rounded-md py-2 text-sm font-semibold"
+                      style={{ background: "#1a3a6b", border: "1px solid #c8a951", color: "#f5f0e0" }}
+                      onClick={() => {
+                        setPateador(selectedPlayer.jugadorId);
+                        setShowDetailModal(false);
+                        setSelectedPlayer(null);
+                      }}
+                    >
+                      Hacer pateador 🥾
+                    </button>
+                  )}
                 </>
               ) : (
                 <p
@@ -429,8 +486,16 @@ export default function TeamBuilder({
         </button>
       )}
 
-      {message && <p className="text-green-700 text-sm">{message}</p>}
-      {error && <p className="text-red-700 text-sm">{error}</p>}
+      {message && (
+        <div className="rounded px-3 py-2 text-sm" style={{ background: "#1a6b3a", border: "1px solid #c8a951", color: "#f5f0e0" }}>
+          {message}
+        </div>
+      )}
+      {error && (
+        <div className="rounded px-3 py-2 text-sm" style={{ background: "#6b1a1a", border: "1px solid #c87551", color: "#f5f0e0" }}>
+          {error}
+        </div>
+      )}
     </div>
   );
 }
