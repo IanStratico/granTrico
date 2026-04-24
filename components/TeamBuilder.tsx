@@ -53,6 +53,7 @@ export default function TeamBuilder({
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [conflictError, setConflictError] = useState<string | null>(null);
   const [activeSlot, setActiveSlot] = useState<number | null>(null); // slot number, not index
   const readonly = fechaEstado !== "PREVIA";
   const [selectedPlayer, setSelectedPlayer] = useState<ConvocadoVM | null>(
@@ -101,6 +102,7 @@ export default function TeamBuilder({
   const openSlot = (slot: number) => {
     setShowDetailModal(false);
     setShowSelectorModal(false);
+    setConflictError(null);
     setActiveSlot(slot);
     const idx = formationOrder.indexOf(slot);
     const playerId = idx >= 0 ? assignments[idx] : null;
@@ -415,7 +417,12 @@ export default function TeamBuilder({
                       className="w-full rounded-md py-2 text-sm font-semibold"
                       style={{ background: "#c8a951", color: "#000" }}
                       onClick={() => {
+                        if (selectedPlayer.jugadorId === pateador) {
+                          setConflictError("A donde vas mostro 😅 Un jugador no puede ser capitán y pateador a la vez.");
+                          return;
+                        }
                         setCapitan(selectedPlayer.jugadorId);
+                        setConflictError(null);
                         setShowDetailModal(false);
                         setSelectedPlayer(null);
                       }}
@@ -435,13 +442,23 @@ export default function TeamBuilder({
                       className="w-full rounded-md py-2 text-sm font-semibold"
                       style={{ background: "#1a3a6b", border: "1px solid #c8a951", color: "#f5f0e0" }}
                       onClick={() => {
+                        if (selectedPlayer.jugadorId === capitan) {
+                          setConflictError("A donde vas mostro 😅 Un jugador no puede ser capitán y pateador a la vez.");
+                          return;
+                        }
                         setPateador(selectedPlayer.jugadorId);
+                        setConflictError(null);
                         setShowDetailModal(false);
                         setSelectedPlayer(null);
                       }}
                     >
                       Hacer pateador 🥾
                     </button>
+                  )}
+                  {conflictError && (
+                    <p className="text-xs text-center font-semibold" style={{ color: "#fca5a5" }}>
+                      {conflictError}
+                    </p>
                   )}
                 </>
               ) : (
@@ -460,6 +477,7 @@ export default function TeamBuilder({
                   background: "transparent",
                 }}
                 onClick={() => {
+                  setConflictError(null);
                   setShowDetailModal(false);
                   setSelectedPlayer(null);
                 }}
