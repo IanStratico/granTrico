@@ -119,7 +119,7 @@ export default function AppShell({ isAdmin, children }: Props) {
         })}
       </nav>
 
-      <main className="flex-1 w-full pt-14 pb-16 md:pb-0 px-3 md:px-6">{children}</main>
+      <main className="flex-1 w-full pb-16 md:pb-0 px-3 md:px-6" style={{ paddingTop: 'calc(3.5rem + env(safe-area-inset-top))' }}>{children}</main>
     </div>
   );
 }
