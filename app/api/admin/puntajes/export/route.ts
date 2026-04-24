@@ -20,7 +20,7 @@ export const GET = async (req: Request) => {
     orderBy: { jugadorId: 'asc' }
   });
 
-  const header = 'id,nombre,apellido,apodo,camada,posicion,tries,tackles,knock_ons,penales,amarillas,rojas';
+  const header = 'id,nombre,apellido,apodo,camada,posicion,tries,tackles,knock_ons,penales,amarillas,rojas,conversiones_metidas,conversiones_erradas,penales_metidos,penales_errados';
   const lines = data.map((jf) =>
     [
       jf.jugadorId,
@@ -34,7 +34,11 @@ export const GET = async (req: Request) => {
       jf.knockOns ?? 0,
       jf.penales ?? 0,
       jf.amarillas ?? 0,
-      jf.rojas ?? 0
+      jf.rojas ?? 0,
+      jf.conversionesMetidas ?? 0,
+      jf.conversionesErradas ?? 0,
+      jf.penalesMetidos ?? 0,
+      jf.penalesErrados ?? 0,
     ].join(',')
   );
   const csv = [header, ...lines].join('\n');

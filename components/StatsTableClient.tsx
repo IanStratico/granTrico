@@ -11,6 +11,10 @@ export interface StatsRow {
   penales: number;
   amarillas: number;
   rojas: number;
+  conversionesMetidas: number;
+  conversionesErradas: number;
+  penalesMetidos: number;
+  penalesErrados: number;
   puntajeOverride: number | null;
 }
 
@@ -43,6 +47,10 @@ export default function StatsTableClient({ fechaId, rows }: Props) {
         penales: r.penales,
         amarillas: r.amarillas,
         rojas: r.rojas,
+        conversionesMetidas: r.conversionesMetidas,
+        conversionesErradas: r.conversionesErradas,
+        penalesMetidos: r.penalesMetidos,
+        penalesErrados: r.penalesErrados,
         puntajeOverride: r.puntajeOverride
       }))
     };
@@ -73,6 +81,10 @@ export default function StatsTableClient({ fechaId, rows }: Props) {
               <th className="px-2 py-2">Penales</th>
               <th className="px-2 py-2">Amarillas</th>
               <th className="px-2 py-2">Rojas</th>
+              <th className="px-2 py-2">C+</th>
+              <th className="px-2 py-2">C-</th>
+              <th className="px-2 py-2">P+</th>
+              <th className="px-2 py-2">P-</th>
               <th className="px-2 py-2">Puntaje override</th>
             </tr>
           </thead>
@@ -80,7 +92,7 @@ export default function StatsTableClient({ fechaId, rows }: Props) {
             {data.map((c) => (
               <tr key={c.jfId} className="border-t">
                 <td className="px-2 py-2 text-left">{c.jugador}</td>
-                {(['tries', 'tackles', 'knockOns', 'penales', 'amarillas', 'rojas'] as const).map((field) => (
+                {(['tries', 'tackles', 'knockOns', 'penales', 'amarillas', 'rojas', 'conversionesMetidas', 'conversionesErradas', 'penalesMetidos', 'penalesErrados'] as const).map((field) => (
                   <td key={field} className="px-2 py-1">
                     <input
                       type="number"

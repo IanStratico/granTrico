@@ -2,14 +2,14 @@
 
 import { useMemo, useState } from 'react';
 import FechaSwitcher from '@/components/FechaSwitcher';
-import { abrevPlantel } from '@/lib/constants';
+import { abrevPlantel, FORWARD_POSITIONS } from '@/lib/constants';
 
 interface JugadorVM {
   jugadorId: number;
   nombre: string;
   apellido: string;
   apodo?: string;
-  posicion: 'FORWARD' | 'BACK';
+  posicion: string;
   camada?: string;
   plantel: string;
   score: number;
@@ -85,7 +85,7 @@ export default function RankingJugadoresClient({ title, estado, prevId, nextId, 
               <div>
                 <p className="text-sm font-semibold" style={{ color: '#f5f0e0' }}>{displayName(j)}</p>
                 <p className="text-xs" style={{ color: 'rgba(245,240,224,0.7)' }}>
-                  {abrevPlantel[j.plantel] ?? j.plantel} · {j.posicion === 'FORWARD' ? 'FWD' : 'BCK'}
+                  {abrevPlantel[j.plantel] ?? j.plantel} · {FORWARD_POSITIONS.includes(j.posicion) ? 'FWD' : 'BCK'}
                 </p>
               </div>
             </div>
@@ -123,7 +123,7 @@ export default function RankingJugadoresClient({ title, estado, prevId, nextId, 
             <div className="space-y-1">
               <p className="text-lg font-semibold" style={{ color: '#c8a951' }}>{displayName(modal)}</p>
               <p className="text-xs" style={{ color: 'rgba(245,240,224,0.7)' }}>
-                {abrevPlantel[modal.plantel] ?? modal.plantel} · {modal.posicion === 'FORWARD' ? 'FWD' : 'BCK'}
+                {abrevPlantel[modal.plantel] ?? modal.plantel} · {FORWARD_POSITIONS.includes(modal.posicion) ? 'FWD' : 'BCK'}
                 {modal.camada ? ` · Camada ${modal.camada}` : ''}
               </p>
             </div>

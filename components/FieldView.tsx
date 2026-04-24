@@ -1,15 +1,15 @@
 'use client';
 
 import PlayerCard from './PlayerCard';
-import { Posicion } from '@prisma/client';
 
 export interface FieldSlot {
   slot: number;
   player: {
     id: number;
     name: string;
-    posicion: Posicion;
+    posicion: string;
     isCapitan: boolean;
+    isPateador?: boolean;
     score?: number | null;
     apodo?: string;
     plantel?: string;
@@ -55,6 +55,7 @@ export default function FieldView({
                       name={p.name}
                       posicion={p.posicion}
                       isCapitan={p.isCapitan}
+                      isPateador={p.isPateador}
                       slot={slot}
                       onClick={() => onSelectSlot(slot)}
                       onSetCapitan={readonly ? undefined : () => onSetCapitan(p.id)}

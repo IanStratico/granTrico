@@ -1,0 +1,1 @@
+ALTER TABLE "EquipoFechaJugador" ADD COLUMN "slot" INTEGER NOT NULL DEFAULT 0;

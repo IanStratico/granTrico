@@ -11,11 +11,14 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { fechaId, jugadorIds, capitanId } = body as {
+  const { fechaId, asignaciones, capitanId, pateadorId } = body as {
     fechaId: number;
-    jugadorIds: number[];
+    asignaciones: { slot: number; jugadorId: number }[];
     capitanId: number | null;
+    pateadorId: number | null;
   };
+
+  const jugadorIds = asignaciones.map((a) => a.jugadorId);
 
   const fecha = await prisma.fecha.findUnique({ where: { id: fechaId }, include: { temporada: true } });
   if (!fecha) return NextResponse.json({ error: 'Fecha no encontrada' }, { status: 404 });
@@ -28,13 +31,20 @@ export async function POST(request: Request) {
     include: { jugador: true }
   });
 
+  const convocadoMap = Object.fromEntries(convocados.map((c) => [c.jugadorId, c]));
+
   const validation = validateRoster(
-    convocados.map((c) => ({
-      jugadorId: c.jugadorId,
-      posicion: c.jugador.posicion,
-      plantel: c.plantel
-    })),
-    capitanId
+    asignaciones.map((a) => {
+      const c = convocadoMap[a.jugadorId];
+      return {
+        jugadorId: a.jugadorId,
+        slot: a.slot,
+        posicion: c.jugador.posicion,
+        plantel: c.plantel,
+      };
+    }),
+    capitanId,
+    pateadorId
   );
   if (!validation.ok) return NextResponse.json({ error: validation.message }, { status: 400 });
 
@@ -53,14 +63,14 @@ export async function POST(request: Request) {
 
   const equipoFecha = await prisma.equipoFecha.upsert({
     where: { equipoId_fechaId: { equipoId: equipo.id, fechaId } },
-    update: { capitanJugadorId: capitanId },
-    create: { equipoId: equipo.id, fechaId, capitanJugadorId: capitanId }
+    update: { capitanJugadorId: capitanId, pateadorJugadorId: pateadorId },
+    create: { equipoId: equipo.id, fechaId, capitanJugadorId: capitanId, pateadorJugadorId: pateadorId }
   });
 
   // replace roster
   await prisma.equipoFechaJugador.deleteMany({ where: { equipoFechaId: equipoFecha.id } });
   await prisma.equipoFechaJugador.createMany({
-    data: jugadorIds.map((jid: number) => ({ equipoFechaId: equipoFecha.id, jugadorId: jid }))
+    data: asignaciones.map((a) => ({ equipoFechaId: equipoFecha.id, jugadorId: a.jugadorId, slot: a.slot }))
   });
 
   return NextResponse.json({ ok: true });

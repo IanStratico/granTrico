@@ -1,12 +1,12 @@
 "use client";
 
-import { Posicion } from "@prisma/client";
-import { abrevPlantel } from "@/lib/constants";
+import { abrevPlantel, FORWARD_POSITIONS } from "@/lib/constants";
 
 interface Props {
   name: string;
-  posicion: Posicion;
+  posicion: string;
   isCapitan?: boolean;
+  isPateador?: boolean;
   slot?: number;
   onClick?: () => void;
   onSetCapitan?: () => void;
@@ -32,6 +32,7 @@ export default function PlayerCard({
   name,
   posicion,
   isCapitan,
+  isPateador,
   slot,
   onClick,
   onSetCapitan,
@@ -42,7 +43,7 @@ export default function PlayerCard({
   camada,
 }: Props) {
   const displayName = apodo || name.split(",")[0]?.trim() || name;
-  const posLabel = posicion === "FORWARD" ? "FWD" : "BCK";
+  const posLabel = FORWARD_POSITIONS.includes(posicion) ? "FWD" : "BCK";
   const plantelLabel = plantel ? (abrevPlantel[plantel] ?? plantel) : null;
 
   return (
@@ -79,7 +80,7 @@ export default function PlayerCard({
           </span>
         )}
 
-        {/* Captain star — top right over blue */}
+        {/* Captain star / pateador icon — top right over blue */}
         {isCapitan && (
           <span
             style={{
@@ -91,6 +92,19 @@ export default function PlayerCard({
             }}
           >
             ⭐
+          </span>
+        )}
+        {isPateador && (
+          <span
+            style={{
+              position: "absolute",
+              top: isCapitan ? 20 : 6,
+              right: 6,
+              fontSize: 11,
+              lineHeight: 1,
+            }}
+          >
+            🥾
           </span>
         )}
 

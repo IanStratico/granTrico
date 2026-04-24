@@ -5,6 +5,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import RankingFechaClient, { RankingTeamVM } from "../RankingFechaClient";
 import { getTemporadaActiva } from "@/lib/temporada";
+import { FORMATION_ORDER } from "@/lib/constants";
 
 interface Props {
   params: { fechaId: string };
@@ -65,9 +66,10 @@ export default async function RankingFechaPage({ params }: Props) {
 
   const teams: RankingTeamVM[] = equipos.map((ef) => {
     const jugadoresOrdenados = [...ef.jugadores]
-      .sort((a, b) => a.id - b.id)
+      .sort((a, b) => FORMATION_ORDER.indexOf(a.slot) - FORMATION_ORDER.indexOf(b.slot))
       .map((j) => ({
         jugadorId: j.jugadorId,
+        slot: j.slot,
         nombre: `${j.jugador.apellido}, ${j.jugador.nombre}`,
         posicion: j.jugador.posicion,
         score: scoreMap[j.jugadorId] ?? null,
@@ -82,6 +84,7 @@ export default async function RankingFechaPage({ params }: Props) {
       usuarioNombre: ef.equipo.usuario.nombre,
       puntajeTotal: ef.puntajeTotal,
       capitanId: ef.capitanJugadorId,
+      pateadorId: ef.pateadorJugadorId,
       jugadores: jugadoresOrdenados,
     };
   });

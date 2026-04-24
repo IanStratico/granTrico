@@ -2,6 +2,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import { EstadoFecha } from "@prisma/client";
+import { FORMATION_ORDER } from "@/lib/constants";
 import EquipoClient from "./EquipoClient";
 
 interface Props {
@@ -75,8 +76,12 @@ export default async function EquipoPage({ searchParams }: Props) {
       include: { jugadores: true },
     }));
 
-  const initialSelected = equipoFecha?.jugadores.map((j) => j.jugadorId) ?? [];
+  const initialSelected = equipoFecha?.jugadores
+    .slice()
+    .sort((a, b) => FORMATION_ORDER.indexOf(a.slot) - FORMATION_ORDER.indexOf(b.slot))
+    .map((j) => j.jugadorId) ?? [];
   const initialCapitan = equipoFecha?.capitanJugadorId ?? null;
+  const initialPateador = equipoFecha?.pateadorJugadorId ?? null;
   const totalEquipo = equipoFecha?.puntajeTotal ?? null;
 
   const puntajes = await prisma.jugadorFecha.findMany({
@@ -114,6 +119,7 @@ export default async function EquipoPage({ searchParams }: Props) {
       }))}
       initialSelected={initialSelected}
       initialCapitan={initialCapitan}
+      initialPateador={initialPateador}
       isAdmin={!!session.user.isAdmin}
       userEmail={session.user.email ?? ""}
       userRole={session.user.isAdmin ? "admin" : "user"}

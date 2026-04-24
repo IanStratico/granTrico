@@ -32,6 +32,12 @@ export default async function AdminFechaPage({ params }: Props) {
   const next =
     index >= 0 && index < fechas.length - 1 ? fechas[index + 1] : null;
 
+  const convocados = await prisma.jugadorFecha.findMany({
+    where: { fechaId: fecha.id },
+    include: { jugador: true },
+    orderBy: { jugador: { apellido: 'asc' } },
+  });
+
   return (
     <AdminFechaClient
       fechaId={fecha.id}
@@ -43,6 +49,16 @@ export default async function AdminFechaPage({ params }: Props) {
       userEmail={session.user.email ?? ""}
       userRole="admin"
       isAdmin={true}
+      convocados={convocados.map((c) => ({
+        jfId: c.id,
+        jugadorId: c.jugadorId,
+        nombre: c.jugador.nombre,
+        apellido: c.jugador.apellido,
+        apodo: c.jugador.apodo ?? '',
+        camada: c.jugador.camada ?? null,
+        posicion: c.jugador.posicion,
+        plantel: c.plantel,
+      }))}
     />
   );
 }

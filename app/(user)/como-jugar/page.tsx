@@ -38,6 +38,11 @@ export default async function ComoJugarPage() {
             Elegí <strong>1 capitán</strong> obligatorio entre los 15
             seleccionados. Su puntaje cuenta doble.
           </li>
+          <li>
+            Elegí <strong>1 pateador</strong> obligatorio entre los 15
+            seleccionados. Solo sus patadas a los palos suman o restan puntos al
+            equipo.
+          </li>
         </ul>
       </section>
 
@@ -105,6 +110,14 @@ export default async function ComoJugarPage() {
         >
           <li>
             El <strong>capitán</strong> suma su puntaje dos veces.
+          </li>
+          <li>
+            El <strong>pateador</strong> suma o resta puntos adicionales según
+            sus patadas a los palos:{" "}
+            <span style={{ color: "#c8a951" }}>
+              conversión metida +1 · conversión errada −1 · penal metido +2 · penal errado −2
+            </span>
+            . Estos puntos solo cuentan si elegiste a ese jugador como pateador.
           </li>
         </ul>
       </section>
