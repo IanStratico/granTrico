@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { Posicion, Plantel } from '@prisma/client';
 
 export async function PATCH(
   request: Request,
@@ -20,19 +21,27 @@ export async function PATCH(
   const body = await request.json();
   const { plantel, posicion, nombre, apellido, apodo, camada } = body;
 
-  if (plantel !== undefined) {
-    await prisma.jugadorFecha.update({ where: { id: jfId }, data: { plantel } });
-  }
+  try {
+    if (plantel !== undefined) {
+      await prisma.jugadorFecha.update({ where: { id: jfId }, data: { plantel: plantel as Plantel } });
+    }
 
-  const jugadorData: Record<string, unknown> = {};
-  if (posicion !== undefined) jugadorData.posicion = posicion;
-  if (nombre !== undefined) jugadorData.nombre = nombre;
-  if (apellido !== undefined) jugadorData.apellido = apellido;
-  if (apodo !== undefined) jugadorData.apodo = apodo || null;
-  if (camada !== undefined) jugadorData.camada = camada ? Number(camada) : null;
-
-  if (Object.keys(jugadorData).length > 0) {
-    await prisma.jugador.update({ where: { id: jf.jugadorId }, data: jugadorData });
+    const hasJugadorUpdate = posicion !== undefined || nombre !== undefined || apellido !== undefined || apodo !== undefined || camada !== undefined;
+    if (hasJugadorUpdate) {
+      await prisma.jugador.update({
+        where: { id: jf.jugadorId },
+        data: {
+          ...(posicion !== undefined && { posicion: posicion as Posicion }),
+          ...(nombre !== undefined && { nombre: nombre as string }),
+          ...(apellido !== undefined && { apellido: apellido as string }),
+          ...(apodo !== undefined && { apodo: (apodo as string) || null }),
+          ...(camada !== undefined && { camada: camada ? Number(camada) : null }),
+        },
+      });
+    }
+  } catch (e) {
+    console.error('[PATCH jugador-fecha]', e);
+    return NextResponse.json({ error: 'Error al guardar en la base de datos' }, { status: 500 });
   }
 
   return NextResponse.json({ ok: true });
