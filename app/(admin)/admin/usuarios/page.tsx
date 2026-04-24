@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 import RoleButton from "@/components/RoleButton";
+import ResetPasswordButton from "@/components/ResetPasswordButton";
 
 export default async function AdminUsuariosPage() {
   const session = await auth();
@@ -27,6 +28,7 @@ export default async function AdminUsuariosPage() {
               <span className="text-xs px-2 py-1 rounded border border-[#c8a951] text-[#f5f0e0]">
                 {u.isAdmin ? "ADMIN" : "USER"}
               </span>
+              <ResetPasswordButton userId={u.id} nombre={u.nombre} />
               <RoleButton userId={u.id} isAdmin={u.isAdmin} />
             </div>
           </div>
