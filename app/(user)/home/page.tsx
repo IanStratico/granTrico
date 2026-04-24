@@ -284,7 +284,7 @@ export default async function HomePage() {
             {/* Los 3 peores */}
             {bottom3.length > 0 && (
               <section style={cardStyle}>
-                <p style={labelStyle}>La pesadilla de la fecha</p>
+                <p style={labelStyle}>Los tres más flojardos de la fecha</p>
                 <div className="space-y-1.5">
                   {bottom3.map((jf, idx) => (
                     <div
@@ -294,7 +294,7 @@ export default async function HomePage() {
                     >
                       <div className="flex items-center gap-2">
                         <span style={{ minWidth: "1.5rem", color: "#e55" }}>
-                          {idx === bottom3.length - 1 ? "💩" : `${idx + 1}.`}
+                          {idx === 0 ? "💩" : `${idx + 1}.`}
                         </span>
                         <div>
                           <p className="font-medium" style={{ color: "#f5f0e0" }}>
