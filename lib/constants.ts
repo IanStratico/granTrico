@@ -7,6 +7,15 @@ export const abrevPlantel: Record<string, string> = {
   PRE_D: 'PD',
 };
 
+export const labelPlantel: Record<string, string> = {
+  PRIMERA: 'Primera',
+  INTER: 'Intermedia',
+  PRE_A: 'Pre A',
+  PRE_B: 'Pre B',
+  PRE_C: 'Pre C',
+  PRE_D: 'Pre D',
+};
+
 export const FORMATION_ORDER = [1, 2, 3, 4, 5, 6, 8, 7, 9, 10, 12, 13, 11, 15, 14];
 
 export const SLOT_POSITION_MAP: Record<number, string> = {

@@ -4,7 +4,8 @@ import { useState, useMemo } from "react";
 import { Plantel, Posicion } from "@prisma/client";
 import FieldView from "./FieldView";
 import PlayerSelectModal from "./PlayerSelectModal";
-import { FORMATION_ORDER, SLOT_POSITION_MAP, SLOT_ALLOWED_POSITIONS, SLOT_DISPLAY_LABEL, FORWARD_POSITIONS, labelPosicion } from "@/lib/constants";
+import { FORMATION_ORDER, SLOT_POSITION_MAP, SLOT_ALLOWED_POSITIONS, SLOT_DISPLAY_LABEL, FORWARD_POSITIONS, labelPosicion, labelPlantel, abrevPlantel } from "@/lib/constants";
+import { REGLA_ESPECIAL_FECHA_CRUZADA } from "@/lib/validation";
 
 export interface ConvocadoVM {
   jugadorId: number;
@@ -157,6 +158,14 @@ export default function TeamBuilder({
       setLoading(false);
       return;
     }
+    for (const [plantel, min] of Object.entries(REGLA_ESPECIAL_FECHA_CRUZADA) as [string, number][]) {
+      const actual = counts.porPlantel[plantel] ?? 0;
+      if (actual !== min) {
+        setError(`Esta fecha tenés que elegir ${min} jugadores de ${labelPlantel[plantel] ?? plantel} (tenés ${actual})`);
+        setLoading(false);
+        return;
+      }
+    }
     const res = await fetch("/api/user/team", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -262,20 +271,34 @@ export default function TeamBuilder({
         <span>FW {counts.forwards}/8</span>
         <span>BK {counts.backs}/7</span>
       </div>
+      {fechaEstado === "PREVIA" && (
+        <div
+          className="rounded px-3 py-2 text-xs"
+          style={{ background: "#1a3a6b", border: "1px solid #c8a951", color: "#f5f0e0" }}
+        >
+          <span style={{ color: "#c8a951", fontWeight: 700 }}>Fecha especial:</span>{" "}
+          obligatorio 4 de Pre C y 4 de Pre D.
+        </div>
+      )}
       <div className="flex flex-wrap gap-2 mt-2">
-        {Object.entries(counts.porPlantel).map(([plantel, cantidad]) => (
-          <span
-            key={plantel}
-            className="px-2 py-1 text-xs rounded"
-            style={{
-              background: "#1a3a6b",
-              border: "1px solid #c8a951",
-              color: "#f5f0e0",
-            }}
-          >
-            {plantel} {cantidad}
-          </span>
-        ))}
+        {Object.entries(counts.porPlantel).map(([plantel, cantidad]) => {
+          const min = REGLA_ESPECIAL_FECHA_CRUZADA[plantel as keyof typeof REGLA_ESPECIAL_FECHA_CRUZADA];
+          const esEspecial = min !== undefined;
+          const cumple = !esEspecial || cantidad >= min;
+          return (
+            <span
+              key={plantel}
+              className="px-2 py-1 text-xs rounded"
+              style={{
+                background: "#1a3a6b",
+                border: `1px solid ${esEspecial && !cumple ? "#fca5a5" : "#c8a951"}`,
+                color: esEspecial && !cumple ? "#fca5a5" : "#f5f0e0",
+              }}
+            >
+              {abrevPlantel[plantel] ?? plantel} {esEspecial ? `${cantidad}/${min}` : cantidad}
+            </span>
+          );
+        })}
       </div>
 
       <div className="px-1">

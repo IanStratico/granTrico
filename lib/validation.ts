@@ -1,14 +1,22 @@
 import { JugadorFecha, Posicion, Plantel } from '@prisma/client';
-import { SLOT_POSITION_MAP, SLOT_ALLOWED_POSITIONS, SLOT_DISPLAY_LABEL, FORWARD_POSITIONS, BACK_POSITIONS, labelPosicion } from './constants';
+import { SLOT_POSITION_MAP, SLOT_ALLOWED_POSITIONS, SLOT_DISPLAY_LABEL, FORWARD_POSITIONS, BACK_POSITIONS, labelPosicion, labelPlantel } from './constants';
 
 export type RosterValidationResult =
   | { ok: true }
   | { ok: false; message: string };
 
+// Regla temporal: esta fecha Pre C y Pre D juegan entre sí en el mismo torneo.
+// Requiere exactamente 4 de cada uno. Remover opts en route.ts cuando la fecha termine.
+export const REGLA_ESPECIAL_FECHA_CRUZADA: Partial<Record<Plantel, number>> = {
+  PRE_C: 4,
+  PRE_D: 4,
+};
+
 export function validateRoster(
   jugadores: { jugadorId: number; slot: number; posicion: Posicion; plantel: Plantel }[],
   capitanId: number | null,
-  pateadorId: number | null
+  pateadorId: number | null,
+  opts?: { minPorPlantel?: Partial<Record<Plantel, number>> }
 ): RosterValidationResult {
   const total = jugadores.length;
   if (total !== 15) return { ok: false, message: 'Debes elegir exactamente 15 jugadores' };
@@ -39,6 +47,16 @@ export function validateRoster(
   for (const j of jugadores) {
     porPlantel[j.plantel] = (porPlantel[j.plantel] || 0) + 1;
     if (porPlantel[j.plantel] > 4) return { ok: false, message: 'Máximo 4 jugadores por plantel' };
+  }
+
+  if (opts?.minPorPlantel) {
+    for (const [plantel, min] of Object.entries(opts.minPorPlantel) as [Plantel, number][]) {
+      const actual = porPlantel[plantel] ?? 0;
+      if (actual < min) {
+        const label = labelPlantel[plantel] ?? plantel;
+        return { ok: false, message: `Esta fecha requiere ${min} jugadores de ${label} (tenés ${actual})` };
+      }
+    }
   }
 
   if (!capitanId) return { ok: false, message: 'Debes elegir un capitán' };

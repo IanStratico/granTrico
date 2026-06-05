@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { validateRoster } from '@/lib/validation';
+import { validateRoster, REGLA_ESPECIAL_FECHA_CRUZADA } from '@/lib/validation';
 import { EstadoFecha } from '@prisma/client';
 
 export async function POST(request: Request) {
@@ -44,7 +44,8 @@ export async function POST(request: Request) {
       };
     }),
     capitanId,
-    pateadorId
+    pateadorId,
+    { minPorPlantel: REGLA_ESPECIAL_FECHA_CRUZADA }
   );
   if (!validation.ok) return NextResponse.json({ error: validation.message }, { status: 400 });
 
