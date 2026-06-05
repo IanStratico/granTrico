@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import InstallBanner from "@/components/InstallBanner";
+import AnuncioPartidoWidget from "@/components/AnuncioPartidoWidget";
 
 const abrevPlantel: Record<string, string> = {
   PRIMERA: "Primera",
@@ -38,13 +39,17 @@ export default async function HomePage() {
     );
   }
 
-  const [ultimaFecha, proximaFecha, gameTopRaw] = await Promise.all([
+  const [ultimaFecha, proximaFecha, borradorFecha, gameTopRaw] = await Promise.all([
     prisma.fecha.findFirst({
       where: { temporadaId: temporada.id, estado: "PUNTUADA" },
       orderBy: { nro: "desc" },
     }),
     prisma.fecha.findFirst({
       where: { temporadaId: temporada.id, estado: "PREVIA" },
+      orderBy: { nro: "asc" },
+    }),
+    prisma.fecha.findFirst({
+      where: { temporadaId: temporada.id, estado: "BORRADOR" },
       orderBy: { nro: "asc" },
     }),
     prisma.gameScore.groupBy({
@@ -152,9 +157,55 @@ export default async function HomePage() {
 
   return (
     <main className="py-4 space-y-4">
+      {proximaFecha && <AnuncioPartidoWidget rival={proximaFecha.rival} />}
       <InstallBanner />
-      {/* Header fecha */}
-      {ultimaFecha ? (
+      {/* Header fecha — prioridad: BORRADOR > PREVIA > PUNTUADA */}
+      {borradorFecha ? (
+        <section style={cardStyle} className="flex items-center justify-between">
+          <div>
+            <p style={labelStyle}>Próxima fecha</p>
+            <h2 className="text-base font-bold" style={{ color: "#c8a951" }}>
+              Fecha #{borradorFecha.nro} — vs {borradorFecha.rival}
+            </h2>
+            <p className="text-xs mt-1" style={{ color: "rgba(245,240,224,0.55)" }}>
+              En preparación · Pronto podrás armar tu equipo
+            </p>
+          </div>
+          <span
+            className="text-xs font-semibold px-2 py-1 rounded"
+            style={{ background: "#1a3a6b", color: "rgba(245,240,224,0.6)", border: "1px solid rgba(245,240,224,0.3)" }}
+          >
+            Borrador
+          </span>
+        </section>
+      ) : proximaFecha ? (
+        <section style={cardStyle} className="flex items-center justify-between">
+          <div>
+            <p style={labelStyle}>Próxima fecha</p>
+            <h2 className="text-base font-bold" style={{ color: "#c8a951" }}>
+              Fecha #{proximaFecha.nro} — vs {proximaFecha.rival}
+            </h2>
+            {proximaFecha.cierraEdicionAt && (
+              <p className="text-xs mt-0.5" style={{ color: "rgba(245,240,224,0.55)" }}>
+                Cierra:{" "}
+                {new Intl.DateTimeFormat("es-AR", {
+                  day: "numeric",
+                  month: "long",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                }).format(proximaFecha.cierraEdicionAt)}
+              </p>
+            )}
+          </div>
+          <Link
+            href="/equipo"
+            className="text-sm px-4 py-1.5 rounded whitespace-nowrap"
+            style={{ background: "#1a6b3a", border: "1px solid #c8a951", color: "#f5f0e0" }}
+          >
+            Armar equipo
+          </Link>
+        </section>
+      ) : ultimaFecha ? (
         <section style={cardStyle} className="flex items-center justify-between">
           <div>
             <p style={labelStyle}>Última fecha puntuada</p>
@@ -356,36 +407,6 @@ export default async function HomePage() {
             )}
           </div>
         </div>
-      )}
-
-      {/* Próxima fecha */}
-      {proximaFecha && (
-        <section style={cardStyle} className="flex items-center justify-between">
-          <div>
-            <p style={labelStyle}>Próxima fecha</p>
-            <h3 className="text-sm font-semibold" style={{ color: "#f5f0e0" }}>
-              Fecha #{proximaFecha.nro} — vs {proximaFecha.rival}
-            </h3>
-            {proximaFecha.cierraEdicionAt && (
-              <p className="text-xs mt-0.5" style={{ color: "rgba(245,240,224,0.55)" }}>
-                Cierra:{" "}
-                {new Intl.DateTimeFormat("es-AR", {
-                  day: "numeric",
-                  month: "long",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                }).format(proximaFecha.cierraEdicionAt)}
-              </p>
-            )}
-          </div>
-          <Link
-            href="/equipo"
-            className="text-sm px-4 py-1.5 rounded whitespace-nowrap"
-            style={{ background: "#1a6b3a", border: "1px solid #c8a951", color: "#f5f0e0" }}
-          >
-            Armar equipo
-          </Link>
-        </section>
       )}
 
       {/* Mini-juego */}

@@ -105,7 +105,7 @@ export default function AdminFechaClient({
 
   const estadoLabel = currentEstado;
 
-  const changeEstado = async (target: "PREVIA" | "CERRADA" | "PUNTUADA") => {
+  const changeEstado = async (target: "BORRADOR" | "PREVIA" | "CERRADA" | "PUNTUADA") => {
     const confirmMsg = `¿Seguro que querés cambiar el estado de la fecha a ${target}?`;
     if (!window.confirm(confirmMsg)) return;
     setChanging(true);
@@ -141,7 +141,7 @@ export default function AdminFechaClient({
             <span className="px-3 py-1 rounded border border-[#c8a951] bg-[#1a3a6b] text-[#f5f0e0] shadow-sm">
               Estado: {estadoLabel}
             </span>
-            {(["PREVIA", "CERRADA", "PUNTUADA"] as const).map((estadoBtn) => (
+            {(["BORRADOR", "PREVIA", "CERRADA", "PUNTUADA"] as const).map((estadoBtn) => (
               <button
                 key={estadoBtn}
                 className={`rounded px-3 py-2 text-sm border border-[#c8a951] ${

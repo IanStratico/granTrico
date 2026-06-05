@@ -25,7 +25,8 @@ export const POST = async (req: Request) => {
       data: {
         nro,
         rival,
-        temporadaId: temporada.id
+        temporadaId: temporada.id,
+        estado: 'BORRADOR',
       }
     });
     return NextResponse.json({ ok: true, id: created.id });

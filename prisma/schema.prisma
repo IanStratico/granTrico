@@ -62,7 +62,7 @@ model Fecha {
   temporadaId     Int         @map("temporada_id")
   nro             Int
   rival           String
-  estado          EstadoFecha @default(PREVIA)
+  estado          EstadoFecha @default(BORRADOR)
   cierraEdicionAt DateTime?   @map("cierra_edicion_at")
   createdAt       DateTime    @default(now()) @map("created_at")
 
@@ -164,6 +164,7 @@ enum Plantel {
 }
 
 enum EstadoFecha {
+  BORRADOR
   PREVIA
   CERRADA
   PUNTUADA
