@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { Plantel, Posicion } from "@prisma/client";
 import FieldView from "./FieldView";
 import PlayerSelectModal from "./PlayerSelectModal";
-import { FORMATION_ORDER, SLOT_POSITION_MAP, FORWARD_POSITIONS, labelPosicion } from "@/lib/constants";
+import { FORMATION_ORDER, SLOT_POSITION_MAP, SLOT_ALLOWED_POSITIONS, SLOT_DISPLAY_LABEL, FORWARD_POSITIONS, labelPosicion } from "@/lib/constants";
 
 export interface ConvocadoVM {
   jugadorId: number;
@@ -209,7 +209,7 @@ export default function TeamBuilder({
   const takenIds = assignments.filter((v): v is number => v !== null);
 
   const slotLabel = activeSlot
-    ? `#${activeSlot} — ${labelPosicion[SLOT_POSITION_MAP[activeSlot]] ?? ""}`
+    ? `#${activeSlot} — ${SLOT_DISPLAY_LABEL[activeSlot] ?? ""}`
     : "";
 
   return (
@@ -324,7 +324,7 @@ export default function TeamBuilder({
           }
         }}
         slotLabel={slotLabel}
-        expectedPosition={activeSlot ? SLOT_POSITION_MAP[activeSlot] : undefined}
+        allowedPositions={activeSlot ? SLOT_ALLOWED_POSITIONS[activeSlot] : undefined}
         jugadores={convocados.map((c) => ({
           ...c,
           nombre: `${c.apellido}, ${c.nombre} - ${c.apodo}`,

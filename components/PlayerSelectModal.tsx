@@ -17,7 +17,7 @@ interface Props {
   onClose: () => void;
   onSelect: (playerId: number) => void;
   slotLabel: string;
-  expectedPosition?: string;
+  allowedPositions?: string[];
   jugadores: PlayerOption[];
   takenIds: number[];
   currentId: number | null;
@@ -29,7 +29,7 @@ export default function PlayerSelectModal({
   onClose,
   onSelect,
   slotLabel,
-  expectedPosition,
+  allowedPositions,
   jugadores,
   takenIds,
   currentId,
@@ -43,10 +43,10 @@ export default function PlayerSelectModal({
         const inName = `${j.nombre}`.toLowerCase().includes(q);
         const available = j.jugadorId === currentId || !takenIds.includes(j.jugadorId);
         const correctPosition =
-          !expectedPosition ||
-          j.posicion === expectedPosition ||
-          (j.posicion === 'FORWARD' && FORWARD_POSITIONS.includes(expectedPosition)) ||
-          (j.posicion === 'BACK' && BACK_POSITIONS.includes(expectedPosition));
+          !allowedPositions ||
+          allowedPositions.includes(j.posicion) ||
+          (j.posicion === 'FORWARD' && allowedPositions.some(p => FORWARD_POSITIONS.includes(p))) ||
+          (j.posicion === 'BACK' && allowedPositions.some(p => BACK_POSITIONS.includes(p)));
         return inName && available && correctPosition;
       })
       .map((j) => ({
@@ -54,7 +54,7 @@ export default function PlayerSelectModal({
         blocked: !!fullPlanteles?.includes(j.plantel),
       }))
       .sort((a, b) => Number(a.blocked) - Number(b.blocked));
-  }, [jugadores, query, takenIds, currentId, expectedPosition, fullPlanteles]);
+  }, [jugadores, query, takenIds, currentId, allowedPositions, fullPlanteles]);
 
   if (!open) return null;
 

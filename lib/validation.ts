@@ -1,5 +1,5 @@
 import { JugadorFecha, Posicion, Plantel } from '@prisma/client';
-import { SLOT_POSITION_MAP, FORWARD_POSITIONS, BACK_POSITIONS, labelPosicion } from './constants';
+import { SLOT_POSITION_MAP, SLOT_ALLOWED_POSITIONS, SLOT_DISPLAY_LABEL, FORWARD_POSITIONS, BACK_POSITIONS, labelPosicion } from './constants';
 
 export type RosterValidationResult =
   | { ok: true }
@@ -24,11 +24,14 @@ export function validateRoster(
       if (!BACK_POSITIONS.includes(expected)) {
         return { ok: false, message: `El slot #${j.slot} es para forwards` };
       }
-    } else if (j.posicion !== expected) {
-      return {
-        ok: false,
-        message: `El slot #${j.slot} requiere un ${labelPosicion[expected] ?? expected}`,
-      };
+    } else {
+      const allowed = SLOT_ALLOWED_POSITIONS[j.slot] ?? [expected];
+      if (!allowed.includes(j.posicion)) {
+        return {
+          ok: false,
+          message: `El slot #${j.slot} requiere un ${SLOT_DISPLAY_LABEL[j.slot] ?? labelPosicion[expected] ?? expected}`,
+        };
+      }
     }
   }
 

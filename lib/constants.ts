@@ -43,3 +43,39 @@ export const labelPosicion: Record<string, string> = {
   WING: 'Wing',
   FULLBACK: 'Fullback',
 };
+
+export const SLOT_ALLOWED_POSITIONS: Record<number, string[]> = {
+  1: ['PILAR'],
+  2: ['HOOKER'],
+  3: ['PILAR'],
+  4: ['SEGUNDA_LINEA'],
+  5: ['SEGUNDA_LINEA'],
+  6: ['TERCERA_LINEA'],
+  7: ['TERCERA_LINEA'],
+  8: ['TERCERA_LINEA'],
+  9: ['MEDIO_SCRUM'],
+  10: ['APERTURA'],
+  11: ['WING', 'FULLBACK'],
+  12: ['CENTRO'],
+  13: ['CENTRO'],
+  14: ['WING', 'FULLBACK'],
+  15: ['WING', 'FULLBACK'],
+};
+
+export const SLOT_DISPLAY_LABEL: Record<number, string> = {
+  1: 'Pilar',
+  2: 'Hooker',
+  3: 'Pilar',
+  4: 'Segunda línea',
+  5: 'Segunda línea',
+  6: 'Tercera línea',
+  7: 'Tercera línea',
+  8: 'Tercera línea',
+  9: 'Medio scrum',
+  10: 'Apertura',
+  11: 'Wing / Fullback',
+  12: 'Centro',
+  13: 'Centro',
+  14: 'Wing / Fullback',
+  15: 'Wing / Fullback',
+};
