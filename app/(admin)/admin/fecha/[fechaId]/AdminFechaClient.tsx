@@ -6,6 +6,7 @@ import RankingLayout from "@/components/RankingLayout";
 import FechaSwitcher from "@/components/FechaSwitcher";
 import ImportButton from "@/components/ImportButton";
 import { labelPosicion } from "@/lib/constants";
+import AnotadoresSection from "./AnotadoresSection";
 
 interface Convocado {
   jfId: number;
@@ -16,6 +17,21 @@ interface Convocado {
   camada: number | null;
   posicion: string;
   plantel: string;
+}
+
+interface Asignacion {
+  id: number;
+  fechaId: number;
+  usuarioId: number;
+  plantel: string;
+  usuario: { id: number; nombre: string; email: string };
+}
+
+interface PartidoAdmin {
+  id: number;
+  fechaId: number;
+  plantel: string;
+  estado: string;
 }
 
 interface Props {
@@ -29,6 +45,8 @@ interface Props {
   userRole: "admin" | "user";
   isAdmin: boolean;
   convocados: Convocado[];
+  asignaciones: Asignacion[];
+  partidos: PartidoAdmin[];
 }
 
 const PLANTELES = ['PRIMERA', 'INTER', 'PRE_A', 'PRE_B', 'PRE_C', 'PRE_D'];
@@ -45,6 +63,8 @@ export default function AdminFechaClient({
   userRole,
   isAdmin,
   convocados: initialConvocados,
+  asignaciones,
+  partidos,
 }: Props) {
   const [changing, setChanging] = useState(false);
   const [currentEstado, setCurrentEstado] = useState(estado);
@@ -158,6 +178,8 @@ export default function AdminFechaClient({
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
         </section>
+
+        <AnotadoresSection fechaId={fechaId} asignaciones={asignaciones} partidos={partidos} />
 
         <section className="space-y-2">
           <h2 className="text-lg font-semibold text-[#c8a951]">Convocados</h2>

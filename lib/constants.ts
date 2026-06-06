@@ -1,3 +1,16 @@
+export const ACCION_LABEL: Record<string, string> = {
+  TRY: 'Try',
+  TACKLE: 'Tackle',
+  KNOCK_ON: 'Knock-on',
+  PENAL: 'Penal com.',
+  AMARILLA: 'Amarilla',
+  ROJA: 'Roja',
+  CONVERSION_METIDA: 'Conv. ✓',
+  CONVERSION_ERRADA: 'Conv. ✗',
+  PENAL_METIDO: 'Penal ✓',
+  PENAL_ERRADO: 'Penal ✗',
+};
+
 export const abrevPlantel: Record<string, string> = {
   PRIMERA: '1ra',
   INTER: 'INT',

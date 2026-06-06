@@ -32,11 +32,18 @@ export default async function AdminFechaPage({ params }: Props) {
   const next =
     index >= 0 && index < fechas.length - 1 ? fechas[index + 1] : null;
 
-  const convocados = await prisma.jugadorFecha.findMany({
-    where: { fechaId: fecha.id },
-    include: { jugador: true },
-    orderBy: { jugador: { apellido: 'asc' } },
-  });
+  const [convocados, asignaciones, partidos] = await Promise.all([
+    prisma.jugadorFecha.findMany({
+      where: { fechaId: fecha.id },
+      include: { jugador: true },
+      orderBy: { jugador: { apellido: 'asc' } },
+    }),
+    prisma.anotadorAsignacion.findMany({
+      where: { fechaId: fecha.id },
+      include: { usuario: { select: { id: true, nombre: true, email: true } } },
+    }),
+    prisma.partido.findMany({ where: { fechaId: fecha.id } }),
+  ]);
 
   return (
     <AdminFechaClient
@@ -58,6 +65,19 @@ export default async function AdminFechaPage({ params }: Props) {
         camada: c.jugador.camada ?? null,
         posicion: c.jugador.posicion,
         plantel: c.plantel,
+      }))}
+      asignaciones={asignaciones.map((a) => ({
+        id: a.id,
+        fechaId: a.fechaId,
+        usuarioId: a.usuarioId,
+        plantel: a.plantel,
+        usuario: a.usuario,
+      }))}
+      partidos={partidos.map((p) => ({
+        id: p.id,
+        fechaId: p.fechaId,
+        plantel: p.plantel,
+        estado: p.estado,
       }))}
     />
   );

@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import InstallBanner from "@/components/InstallBanner";
 import AnuncioPartidoWidget from "@/components/AnuncioPartidoWidget";
+import AnotadorHomeCard from "@/components/AnotadorHomeCard";
+import { getAsignacionesActivasDeUsuario } from "@/lib/anotador";
 
 const abrevPlantel: Record<string, string> = {
   PRIMERA: "Primera",
@@ -38,6 +40,17 @@ export default async function HomePage() {
       </main>
     );
   }
+
+  const [asignacionesAnotador, partidosEnVivo] = await Promise.all([
+    getAsignacionesActivasDeUsuario(userId),
+    temporada
+      ? prisma.partido.findMany({
+          where: { estado: 'EN_CURSO', fecha: { temporadaId: temporada.id } },
+          include: { fecha: true },
+          orderBy: { iniciadoAt: 'asc' },
+        })
+      : Promise.resolve([]),
+  ]);
 
   const [ultimaFecha, proximaFecha, borradorFecha, gameTopRaw] = await Promise.all([
     prisma.fecha.findFirst({
@@ -155,10 +168,48 @@ export default async function HomePage() {
 
   const medals = ["🥇", "🥈", "🥉"];
 
+  const anotadorProps = asignacionesAnotador.map((a) => ({
+    fechaNro: a.fecha.nro,
+    rival: a.fecha.rival,
+    plantel: a.plantel,
+    partidoId: a.partido?.id ?? 0,
+    estadoPartido: a.partido?.estado ?? "NO_INICIADO",
+  })).filter((a) => a.partidoId > 0);
+
   return (
     <main className="py-4 space-y-4">
       {proximaFecha && <AnuncioPartidoWidget rival={proximaFecha.rival} />}
       <InstallBanner />
+      {/* Partidos en vivo — visibles para todos */}
+      {partidosEnVivo.length > 0 && (
+        <section
+          className="rounded-xl p-4 space-y-2"
+          style={{ background: "#0d1f35", border: "2px solid #ef4444" }}
+        >
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" />
+            <p className="text-xs font-bold uppercase tracking-widest" style={{ color: "#ef4444" }}>
+              Partidos en vivo
+            </p>
+          </div>
+          {partidosEnVivo.map((p) => (
+            <div key={p.id} className="flex items-center justify-between">
+              <p className="text-sm font-semibold" style={{ color: "#f5f0e0" }}>
+                Fecha {p.fecha.nro} · {abrevPlantel[p.plantel] ?? p.plantel} vs {p.fecha.rival}
+              </p>
+              <a
+                href={`/vivo/${p.id}`}
+                className="rounded-lg px-3 py-2 text-xs font-bold whitespace-nowrap"
+                style={{ background: "#ef4444", color: "#fff", border: "none" }}
+              >
+                Ver en vivo
+              </a>
+            </div>
+          ))}
+        </section>
+      )}
+
+      {anotadorProps.length > 0 && <AnotadorHomeCard asignaciones={anotadorProps} />}
       {/* Header fecha — prioridad: BORRADOR > PREVIA > PUNTUADA */}
       {borradorFecha ? (
         <section style={cardStyle} className="flex items-center justify-between">
