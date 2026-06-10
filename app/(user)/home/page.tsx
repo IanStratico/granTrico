@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import InstallBanner from "@/components/InstallBanner";
 import AnuncioPartidoWidget from "@/components/AnuncioPartidoWidget";
+import MantenimientoBanner from "@/components/MantenimientoBanner";
 import AnotadorHomeCard from "@/components/AnotadorHomeCard";
 import { getAsignacionesActivasDeUsuario } from "@/lib/anotador";
 
@@ -178,6 +179,7 @@ export default async function HomePage() {
 
   return (
     <main className="py-4 space-y-4">
+      <MantenimientoBanner />
       {proximaFecha && <AnuncioPartidoWidget rival={proximaFecha.rival} />}
       <InstallBanner />
       {/* Partidos en vivo — visibles para todos */}
